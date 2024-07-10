@@ -8,6 +8,8 @@ function Dashboard() {
       <Link to="/habits">Habits</Link>
       <br />
       <Link to="/categories">Categories</Link>
+      <br />
+      <Link to="/logout">Logout</Link>
     </div>
   );
 }

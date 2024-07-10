@@ -3,7 +3,7 @@
 # Standard library imports
 
 # Remote library imports
-from flask import request
+from flask import request, session
 from flask_restful import Resource
 
 # Local imports
@@ -17,13 +17,67 @@ from models import User, Category, Habit, HabitLog, HabitData
 def index():
     return '<h1>Project Server</h1>'
 
-class UserResource(Resource):
-    def get(self):
-        users = User.query.all()
-        
-        return users, 200
+@app.route('/session')
+def check_session():
+    user_id = session.get('user_id')
+    print("Checking session: user_id =", user_id)  # Debug print
+    if user_id:
+        user = User.query.get(user_id)
+        return user.to_dict(), 200
+    return {'error': 'Not logged in'}, 401
 
-api.add_resource(UserResource, "/users")
+class Login(Resource):
+
+    def post(self):
+
+        username = request.get_json()['username']
+        user = User.query.filter(User.username == username).first()
+
+        password = request.get_json()['password']
+
+        if user and user.authenticate(password):
+            session['user_id'] = user.id
+            print("Login successful: user_id set to", user.id)  # Debug print
+            return user.to_dict(), 200
+
+        return {'error': 'Invalid username or password'}, 401
+    
+class SignUp(Resource):
+
+    def post(self):
+        data = request.get_json()
+        username = data['username']
+        password = data['password']
+
+        if User.query.filter_by(username=username).first():
+            return {'error': 'Username already exists'}, 400
+
+        new_user = User(username=username)
+        new_user.password_hash = password
+        db.session.add(new_user)
+        db.session.commit()
+
+        session['user_id'] = new_user.id
+        print("Signup successful: user_id set to", new_user.id)  # Debug print
+        return new_user.to_dict(), 201
+    
+class Logout(Resource):
+    def post(self):
+        print("Logging out user: user_id =", session.get('user_id'))  # Debug print
+        session.pop('user_id', None)
+        return {'message': 'Successfully logged out'}, 200
+
+api.add_resource(Logout, "/logout")
+api.add_resource(Login, "/login")
+api.add_resource(SignUp, "/signup")
+
+# class UserResource(Resource):
+#     def get(self):
+#         users = User.query.all()
+        
+#         return users, 200
+
+# api.add_resource(UserResource, "/users")
 
 if __name__ == '__main__':
     app.run(port=5555, debug=True)

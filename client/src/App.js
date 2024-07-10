@@ -7,6 +7,7 @@ import About from "./components/About";
 import Dashboard from "./components/Dashboard";
 import NavBar from "./components/NavBar"; // Import the NavBar component
 import Footer from "./components/Footer";
+import ProtectedRoute from "./components/ProtectedRoute"; // Import ProtectedRoute component
 import "./App.css"; // Import the CSS file
 
 function App() {
@@ -21,7 +22,14 @@ function App() {
         <Route path="about" element={<About />} />
         <Route path="login" element={<Login />} />
         <Route path="signup" element={<SignUp />} />
-        <Route path="dashboard" element={<Dashboard />} />
+        <Route
+          path="dashboard"
+          element={
+            <ProtectedRoute>
+              <Dashboard />
+            </ProtectedRoute>
+          }
+        />
       </Routes>
       {showNavBar && <Footer />}
     </div>
