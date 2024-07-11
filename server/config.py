@@ -12,10 +12,16 @@ from sqlalchemy import MetaData
 
 # Instantiate app, set attributes
 app = Flask(__name__)
+app.secret_key = b'\x92\xc0\xd6\xab!+j\xd1_\xd6\xfd\x00\t\x01\x94\xb9'
 app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///app.db'
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
-app.config['SECRET_KEY'] = 'your_secret_key_here'
 app.json.compact = False
+
+app.config.update(
+    SESSION_COOKIE_HTTPONLY=True,
+    SESSION_COOKIE_SAMESITE='None',  # This is required for cross-site cookies
+    SESSION_COOKIE_SECURE=False  # Set to True if you are using HTTPS
+)
 
 # Define metadata, instantiate db
 metadata = MetaData(naming_convention={
@@ -29,4 +35,4 @@ db.init_app(app)
 api = Api(app)
 
 # Instantiate CORS
-CORS(app, supports_credentials=True)
+CORS(app, supports_credentials=True, origins=["http://localhost:3000"])

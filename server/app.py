@@ -11,6 +11,7 @@ from config import app, db, api
 # Import your models
 from models import User, Category, Habit, HabitLog, HabitData
 
+# app.config['SECRET_KEY'] = 'your_secret_key_here'
 # Views go here!
 
 @app.route('/')
@@ -25,6 +26,11 @@ def check_session():
         user = User.query.get(user_id)
         return user.to_dict(), 200
     return {'error': 'Not logged in'}, 401
+
+@app.route('/clear_session')
+def clear_session():
+    session.clear()
+    return {'message': 'Session cleared'}, 200
 
 class Login(Resource):
 
@@ -70,14 +76,6 @@ class Logout(Resource):
 api.add_resource(Logout, "/logout")
 api.add_resource(Login, "/login")
 api.add_resource(SignUp, "/signup")
-
-# class UserResource(Resource):
-#     def get(self):
-#         users = User.query.all()
-        
-#         return users, 200
-
-# api.add_resource(UserResource, "/users")
 
 if __name__ == '__main__':
     app.run(port=5555, debug=True)
