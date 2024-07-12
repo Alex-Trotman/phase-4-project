@@ -7,8 +7,8 @@ const MyProvider = (props) => {
 
   useEffect(() => {
     // Example: Check session on mount
-    fetch("http://127.0.0.1:5555/check_session", {
-      credentials: "include",
+    fetch("/check_session", {
+      // credentials: "include",
     })
       .then((response) => {
         if (response.ok) {
@@ -19,7 +19,7 @@ const MyProvider = (props) => {
       })
       .then((data) => {
         if (!data.error) {
-          setUser(data.user);
+          setUser(data);
         }
       })
       .catch((error) => {

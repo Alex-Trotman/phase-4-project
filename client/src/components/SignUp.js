@@ -1,18 +1,27 @@
-import React, { useState } from "react";
+import React, { useState, useContext, useEffect } from "react";
 import { Link, useNavigate } from "react-router-dom";
+import { MyContext } from "../MyContext";
 import "../styles/Signup.css"; // Ensure the import path is correct
 
 function Signup() {
+  const { user, setUser } = useContext(MyContext);
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
   const [error, setError] = useState("");
   const navigate = useNavigate();
 
+  useEffect(() => {
+    if (user) {
+      console.log("Line 15 login.js, user is set");
+      navigate("/dashboard");
+    }
+  }, [user]);
+
   const handleSubmit = (e) => {
     e.preventDefault();
     setError("");
 
-    fetch("http://localhost:5555/signup", {
+    fetch("/signup", {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
@@ -29,6 +38,7 @@ function Signup() {
       })
       .then((data) => {
         console.log("Sign up successful", data);
+        setUser(data);
         // Redirect to the dashboard or another page
         navigate("/dashboard");
       })

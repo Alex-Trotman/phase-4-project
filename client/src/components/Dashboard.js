@@ -8,20 +8,24 @@ function Dashboard() {
 
   useEffect(() => {
     if (!user) {
-      console.log("User is not set, navigating to /login", user);
-      navigate("/login");
-    } else {
-      console.log("User is set", user);
+      console.log("Setting timer");
+      const loadingTimeLimit = 1000;
+      const timer = setTimeout(() => {
+        navigate("/login");
+      }, loadingTimeLimit);
+      return () => clearTimeout(timer);
     }
   }, [user, navigate]);
 
   if (!user) {
-    return null; // Optionally, render null or a loading spinner while redirecting
+    return <h1>Loading...</h1>;
   }
 
   return (
     <div>
-      <h1>Dashboard</h1>
+      <h1>User: {user.username}</h1>
+      <h1>User: {user._password_hash}</h1>
+
       <Link to="/habits">Habits</Link>
       <br />
       <Link to="/categories">Categories</Link>

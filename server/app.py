@@ -33,27 +33,6 @@ class CheckSession(Resource):
         else:
             return {'message': '401: Not Authorized'}, 401
 
-    # def get(self):
-    #     test = session.get('user_id')
-    #     print("RIGHT HERE", test)
-    #     user = User.query.filter(User.id == session.get('user_id')).first()
-    #     if user:
-    #         print(user)
-    #         return user.to_dict()
-    #     else:
-    #         return {'message': '401: Not Authorized'}, 401
-
-api.add_resource(CheckSession, '/check_session')
-
-# @app.route('/session')
-# def check_session():
-#     user_id = session.get('user_id')
-#     print("Checking session: user_id =", user_id)  # Debug print
-#     if user_id:
-#         user = User.query.get(user_id)
-#         return user.to_dict(), 200
-#     return {'error': 'Not logged in'}, 401
-
 @app.route('/clear_session')
 def clear_session():
     session.clear()
@@ -99,6 +78,7 @@ class Logout(Resource):
         session.clear()
         return {'message': '204: No Content'}, 204
 
+api.add_resource(CheckSession, '/check_session')
 api.add_resource(Logout, "/logout")
 api.add_resource(Login, "/login")
 api.add_resource(SignUp, "/signup")

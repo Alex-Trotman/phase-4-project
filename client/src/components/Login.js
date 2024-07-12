@@ -4,41 +4,24 @@ import "../styles/Login.css"; // Ensure the import path is correct
 import { MyContext } from "../MyContext";
 
 function Login() {
-  const { setUser } = useContext(MyContext); // Use the setUser function from context
+  const { user, setUser } = useContext(MyContext);
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
   const [error, setError] = useState("");
   const navigate = useNavigate();
 
   useEffect(() => {
-    fetch("http://127.0.0.1:5555/check_session", {
-      credentials: "include", // This ensures cookies are sent with the request
-    })
-      .then((response) => {
-        if (response.ok) {
-          return response.json();
-        } else {
-          throw new Error("Not authenticated");
-        }
-      })
-      .then((data) => {
-        console.log("Check session response", data);
-        if (!data.error) {
-          console.log("User data from session check:", data.user); // Log data.user
-          setUser(data.user); // Set the user state
-          navigate("/dashboard");
-        }
-      })
-      .catch((error) => {
-        console.error("There was an error checking session status!", error);
-      });
-  }, [navigate, setUser]);
+    if (user) {
+      console.log("Line 15 login.js, user is set");
+      navigate("/dashboard");
+    }
+  }, [user]);
 
   const handleSubmit = (e) => {
     e.preventDefault();
     setError("");
 
-    fetch("http://127.0.0.1:5555/login", {
+    fetch("/login", {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
@@ -56,9 +39,9 @@ function Login() {
       })
       .then((data) => {
         console.log("Login successful", data);
-        console.log("User data from login:", data.user); // Log data.user
-        setUser(data.user); // Set the user state
-        navigate("/dashboard");
+        console.log("User data from login:", data); // Log data.user
+        setUser(data); // Set the user state
+        // navigate("/dashboard");
       })
       .catch((error) => {
         console.error("There was an error logging in!", error);

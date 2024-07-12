@@ -17,11 +17,11 @@ app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///app.db'
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 app.json.compact = False
 
-app.config.update(
-    SESSION_COOKIE_HTTPONLY=True,
-    SESSION_COOKIE_SAMESITE='None',  # This is required for cross-site cookies
-    SESSION_COOKIE_SECURE=False  # Set to True if you are using HTTPS
-)
+# app.config.update(
+#     SESSION_COOKIE_HTTPONLY=True,
+#     SESSION_COOKIE_SAMESITE='None',  # This is required for cross-site cookies
+#     SESSION_COOKIE_SECURE=False  # Set to True if you are using HTTPS
+# )
 
 # Define metadata, instantiate db
 metadata = MetaData(naming_convention={
