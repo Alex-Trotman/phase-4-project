@@ -6,16 +6,17 @@ function Logout() {
 
   useEffect(() => {
     fetch("http://127.0.0.1:5555/logout", {
-      method: "POST",
-      credentials: "include", // This ensures cookies are sent with the request
+      method: "DELETE",
     })
-      .then((response) => {
+      .then(response => {
         if (response.ok) {
-          navigate("/login");
+          navigate("/");
+        } else {
+          console.error("Logout failed");
         }
       })
-      .catch((error) => {
-        console.error("There was an error logging out!", error);
+      .catch(error => {
+        console.error("Error during logout:", error);
       });
   }, [navigate]);
 

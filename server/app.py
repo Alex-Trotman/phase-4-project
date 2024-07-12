@@ -18,14 +18,41 @@ from models import User, Category, Habit, HabitLog, HabitData
 def index():
     return '<h1>Project Server</h1>'
 
-@app.route('/session')
-def check_session():
-    user_id = session.get('user_id')
-    print("Checking session: user_id =", user_id)  # Debug print
-    if user_id:
-        user = User.query.get(user_id)
-        return user.to_dict(), 200
-    return {'error': 'Not logged in'}, 401
+class CheckSession(Resource):
+
+    def get(self):
+        user_id = session.get('user_id')
+        print("RIGHT HERE", user_id)
+        if user_id:
+            user = User.query.filter(User.id == user_id).first()
+            if user:
+                print(user)
+                return user.to_dict(), 200
+            else:
+                return {'message': '401: Not Authorized'}, 401
+        else:
+            return {'message': '401: Not Authorized'}, 401
+
+    # def get(self):
+    #     test = session.get('user_id')
+    #     print("RIGHT HERE", test)
+    #     user = User.query.filter(User.id == session.get('user_id')).first()
+    #     if user:
+    #         print(user)
+    #         return user.to_dict()
+    #     else:
+    #         return {'message': '401: Not Authorized'}, 401
+
+api.add_resource(CheckSession, '/check_session')
+
+# @app.route('/session')
+# def check_session():
+#     user_id = session.get('user_id')
+#     print("Checking session: user_id =", user_id)  # Debug print
+#     if user_id:
+#         user = User.query.get(user_id)
+#         return user.to_dict(), 200
+#     return {'error': 'Not logged in'}, 401
 
 @app.route('/clear_session')
 def clear_session():
@@ -68,10 +95,9 @@ class SignUp(Resource):
         return new_user.to_dict(), 201
     
 class Logout(Resource):
-    def post(self):
-        print("Logging out user: user_id =", session.get('user_id'))  # Debug print
-        session.pop('user_id', None)
-        return {'message': 'Successfully logged out'}, 200
+    def delete(self): 
+        session.clear()
+        return {'message': '204: No Content'}, 204
 
 api.add_resource(Logout, "/logout")
 api.add_resource(Login, "/login")

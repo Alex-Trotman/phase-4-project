@@ -9,11 +9,18 @@ function Login() {
   const navigate = useNavigate();
 
   useEffect(() => {
-    fetch("http://127.0.0.1:5555/session", {
+    fetch("http://127.0.0.1:5555/check_session", {
       credentials: "include", // This ensures cookies are sent with the request
     })
-      .then((response) => response.json())
+      .then((response) => {
+        if (response.ok) {
+          return response.json();
+        } else {
+          throw new Error("Not authenticated");
+        }
+      })
       .then((data) => {
+        console.log(data);
         if (!data.error) {
           navigate("/dashboard");
         }
