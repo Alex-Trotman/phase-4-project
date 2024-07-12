@@ -1,8 +1,10 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useContext } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import "../styles/Login.css"; // Ensure the import path is correct
+import { MyContext } from "../MyContext";
 
 function Login() {
+  const { setUser } = useContext(MyContext); // Use the setUser function from context
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
   const [error, setError] = useState("");
@@ -20,15 +22,17 @@ function Login() {
         }
       })
       .then((data) => {
-        console.log(data);
+        console.log("Check session response", data);
         if (!data.error) {
+          console.log("User data from session check:", data.user); // Log data.user
+          setUser(data.user); // Set the user state
           navigate("/dashboard");
         }
       })
       .catch((error) => {
         console.error("There was an error checking session status!", error);
       });
-  }, [navigate]);
+  }, [navigate, setUser]);
 
   const handleSubmit = (e) => {
     e.preventDefault();
@@ -52,7 +56,8 @@ function Login() {
       })
       .then((data) => {
         console.log("Login successful", data);
-        // Redirect to the dashboard or another page
+        console.log("User data from login:", data.user); // Log data.user
+        setUser(data.user); // Set the user state
         navigate("/dashboard");
       })
       .catch((error) => {

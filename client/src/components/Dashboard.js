@@ -1,29 +1,23 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useContext } from "react";
 import { Link, useNavigate } from "react-router-dom";
+import { MyContext } from "../MyContext";
 
 function Dashboard() {
+  const { user } = useContext(MyContext);
   const navigate = useNavigate();
 
-  // useEffect(() => {
-  //   fetch("http://127.0.0.1:5555/session", {
-  //     credentials: "include", // This ensures cookies are sent with the request
-  //   })
-  //     .then((response) => {
-  //       if (!response.ok) {
-  //         throw new Error("Unauthorized");
-  //       }
-  //       return response.json();
-  //     })
-  //     .then((data) => {
-  //       if (data.error) {
-  //         navigate("/login");
-  //       }
-  //     })
-  //     .catch((error) => {
-  //       console.error("There was an error checking session status!", error);
-  //       navigate("/login");
-  //     });
-  // }, [navigate]);
+  useEffect(() => {
+    if (!user) {
+      console.log("User is not set, navigating to /login", user);
+      navigate("/login");
+    } else {
+      console.log("User is set", user);
+    }
+  }, [user, navigate]);
+
+  if (!user) {
+    return null; // Optionally, render null or a loading spinner while redirecting
+  }
 
   return (
     <div>
