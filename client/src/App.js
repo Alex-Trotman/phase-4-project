@@ -24,7 +24,9 @@ export default function App() {
         </Route>
         <Route path="login" element={<Login />} />
         <Route path="signup" element={<SignUp />} />
-        <Route path="dashboard" element={<Dashboard />} />
+        <Route path="dashboard" element={<DashboardLayout />}>
+          <Route index element={<Dashboard />} />
+        </Route>
         <Route path="logout" element={<Logout />} />
       </Routes>
       {/* {showNavBar && <Footer />} */}
@@ -38,6 +40,16 @@ function HomeLayout() {
       <NavBar />
       <Outlet />
       <Footer />
+    </div>
+  );
+}
+
+function DashboardLayout() {
+  return (
+    <div>
+      {/* <NavBar /> */}
+      <Outlet />
+      {/* <Footer /> */}
     </div>
   );
 }
