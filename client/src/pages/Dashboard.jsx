@@ -1,6 +1,7 @@
 import React, { useEffect, useContext } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { MyContext } from "../MyContext";
+import "../styles/Dashboard.css";
 
 function Dashboard() {
   const { user } = useContext(MyContext);
@@ -22,17 +23,20 @@ function Dashboard() {
   }
 
   return (
-    <div>
-      <h1>User: {user.username}</h1>
-      <h1>User: {user._password_hash}</h1>
-
-      <Link to="/habits">Habits</Link>
-      <br />
-      <Link to="/categories">Categories</Link>
-      <br />
-      <Link to="/logout">Logout</Link>
-    </div>
+    <>
+      <div className="card"></div>
+      <div className="card"></div>
+      <div className="card"></div>
+      <div className="card"></div>
+      <div className="card"></div>
+      <div className="card"></div>
+      {/* <Link to="/logout">Logout</Link> */}
+    </>
   );
 }
 
 export default Dashboard;
+
+{
+  /* <Link to="/logout">Logout</Link>; */
+}

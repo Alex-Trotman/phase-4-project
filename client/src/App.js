@@ -1,22 +1,21 @@
-import React, { useEffect, useState } from "react";
-import { Routes, Route, useLocation, Outlet } from "react-router-dom";
-import Home from "./components/Home";
-import SignUp from "./components/SignUp";
-import Login from "./components/Login";
-import About from "./components/About";
-import Dashboard from "./components/Dashboard";
+import React from "react";
+import { Routes, Route, Outlet } from "react-router-dom";
+import Home from "./pages/Home";
+import SignUp from "./pages/SignUp";
+import Login from "./pages/Login";
+import About from "./pages/About";
+import Dashboard from "./pages/Dashboard";
 import NavBar from "./components/NavBar"; // Import the NavBar component
+import SideBar from "./components/SideBar";
+import DashboardHeader from "./components/DashboardHeader";
+import Categories from "./pages/Categories";
 import Footer from "./components/Footer";
-import Logout from "./components/Logout";
+import Logout from "./pages/Logout";
 import "./App.css"; // Import the CSS file
 
 export default function App() {
-  const location = useLocation();
-  // const showNavBar = ["/", "/about"].includes(location.pathname);
-
   return (
     <div>
-      {/* {showNavBar && <NavBar />} */}
       <Routes>
         <Route path="/" element={<HomeLayout />}>
           <Route index element={<Home />} />
@@ -26,10 +25,10 @@ export default function App() {
         <Route path="signup" element={<SignUp />} />
         <Route path="dashboard" element={<DashboardLayout />}>
           <Route index element={<Dashboard />} />
+          <Route path="categories" element={<Categories />} />
         </Route>
         <Route path="logout" element={<Logout />} />
       </Routes>
-      {/* {showNavBar && <Footer />} */}
     </div>
   );
 }
@@ -46,10 +45,12 @@ function HomeLayout() {
 
 function DashboardLayout() {
   return (
-    <div>
-      {/* <NavBar /> */}
-      <Outlet />
-      {/* <Footer /> */}
+    <div className="dashboard-container">
+      <DashboardHeader className="header" />
+      <SideBar className="sidebar" />
+      <div className="main">
+        <Outlet />
+      </div>
     </div>
   );
 }

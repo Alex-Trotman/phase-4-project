@@ -5,7 +5,10 @@
   --text: hsla(0, 0%, 100%, 0.88);
 }
 
-body {
-  background-color: whitesmoke;
-  color: black;
+html,
+body,
+#root {
+  height: 100%;
+  margin: 0;
+  padding: 0;
 }
