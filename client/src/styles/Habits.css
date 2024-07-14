@@ -1,0 +1,115 @@
+/* Resetting styles to avoid conflicts */
+/* * {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+html,
+body,
+#root,
+.dashboard-container {
+  height: 100%;
+  min-height: 100vh;
+}
+
+.habits-container {
+  padding: 20px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  height: 100%;
+} */
+
+.main {
+  /* background-color: whitesmoke; */
+}
+
+.habits-container h1 {
+  margin-bottom: 20px;
+  font-size: 24px;
+  color: #333;
+}
+
+.habit-input {
+  display: flex;
+  margin-bottom: 20px;
+  gap: 10px;
+}
+
+.habit-input input {
+  padding: 10px;
+  border-radius: 4px;
+  border: 1px solid #ccc;
+}
+
+.habit-input select {
+  padding: 10px;
+  border-radius: 4px;
+  border: 1px solid #ccc;
+}
+
+.habit-input button {
+  padding: 10px 20px;
+  border: none;
+  border-radius: 4px;
+  background-color: #28a745;
+  color: #fff;
+  cursor: pointer;
+  transition: background-color 0.3s;
+}
+
+.habit-input button:hover {
+  background-color: #218838;
+}
+
+.table-container {
+  width: 100%;
+  max-width: 1200px;
+  overflow-x: auto;
+}
+
+.habit-table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+.habit-table th,
+.habit-table td {
+  padding: 10px;
+  border: 1px solid #ccc;
+  text-align: left;
+}
+
+.habit-table th {
+  background-color: #f2f2f2;
+}
+
+.habit-item input {
+  width: 100%;
+  padding: 10px;
+  border-radius: 4px;
+  border: 1px solid #ccc;
+}
+
+.habit-item select {
+  width: 100%;
+  padding: 10px;
+  border-radius: 4px;
+  border: 1px solid #ccc;
+}
+
+.habit-item button {
+  padding: 10px 20px;
+  border: none;
+  border-radius: 4px;
+  background-color: #dc3545;
+  color: #fff;
+  cursor: pointer;
+  transition: background-color 0.3s;
+}
+
+.habit-item button:hover {
+  background-color: #c82333;
+}

@@ -1,12 +1,17 @@
 import React from "react";
 import { Link } from "react-router-dom";
-// import "../styles/DashboardHeader.css";
+import "../styles/DashboardHeader.css";
 
 function DashboardHeader() {
   return (
     <div className="header">
-      <div>All habits</div>
-      <Link to="/logout">Logout</Link>
+      <div className="header-left"></div>
+      <input type="text" className="header-search" placeholder="Search..." />
+      <div className="header-right">
+        <Link to="/logout" className="header-logout">
+          Logout
+        </Link>
+      </div>
     </div>
   );
 }

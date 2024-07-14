@@ -9,6 +9,7 @@ import NavBar from "./components/NavBar"; // Import the NavBar component
 import SideBar from "./components/SideBar";
 import DashboardHeader from "./components/DashboardHeader";
 import Categories from "./pages/Categories";
+import Habits from "./pages/Habits";
 import Footer from "./components/Footer";
 import Logout from "./pages/Logout";
 import "./App.css"; // Import the CSS file
@@ -26,6 +27,7 @@ export default function App() {
         <Route path="dashboard" element={<DashboardLayout />}>
           <Route index element={<Dashboard />} />
           <Route path="categories" element={<Categories />} />
+          <Route path="habits" element={<Habits />} />
         </Route>
         <Route path="logout" element={<Logout />} />
       </Routes>

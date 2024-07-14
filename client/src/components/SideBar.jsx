@@ -44,14 +44,16 @@ function SideBar() {
 
       {/* Habits section */}
       <div className="sidebar-section">
-        <h3 className="sidebar-section-title">Habits</h3>
+        <h3 className="sidebar-section-title">
+          <Link to="/dashboard/habits">Habits</Link>
+        </h3>
         <ul className="sidebar-nav">
           <li className="sidebar-item">
             <Link to="/all-habits">All Habits</Link>
           </li>
-          <li className="sidebar-item">
+          {/* <li className="sidebar-item">
             <Link to="/new-habit">Add New Habit</Link>
-          </li>
+          </li> */}
         </ul>
       </div>
 
