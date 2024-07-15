@@ -100,7 +100,7 @@ function SideBar() {
           {categories.map((category) => (
             <li key={category.name} className="sidebar-item">
               <Link
-                to={`/dashboard/categories/${category.name}`}
+                to={`/dashboard/category/${category.id}`}
                 className="sidebar-link"
               >
                 {category.name}

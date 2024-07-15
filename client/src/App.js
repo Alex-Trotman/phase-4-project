@@ -9,6 +9,7 @@ import NavBar from "./components/NavBar"; // Import the NavBar component
 import SideBar from "./components/SideBar";
 import DashboardHeader from "./components/DashboardHeader";
 import Categories from "./pages/Categories";
+import CategoryPage from "./pages/CategoryPage";
 import Habits from "./pages/Habits";
 import Footer from "./components/Footer";
 import Logout from "./pages/Logout";
@@ -34,6 +35,7 @@ export default function App() {
           <Route path="today" element={<Today />} />
           <Route path="week" element={<Week />} />
           <Route path="month" element={<Month />} />
+          <Route path="category/:categoryId" element={<CategoryPage />} />
         </Route>
         <Route path="logout" element={<Logout />} />
       </Routes>
