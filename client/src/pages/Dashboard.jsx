@@ -1,5 +1,5 @@
 import React, { useEffect, useContext } from "react";
-import { Link, useNavigate } from "react-router-dom";
+import { useNavigate } from "react-router-dom"; // Link,
 import { MyContext } from "../MyContext";
 import "../styles/Dashboard.css";
 
@@ -36,7 +36,3 @@ function Dashboard() {
 }
 
 export default Dashboard;
-
-{
-  /* <Link to="/logout">Logout</Link>; */
-}

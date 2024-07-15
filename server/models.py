@@ -7,7 +7,7 @@ import bcrypt
 class User(db.Model, SerializerMixin):
     __tablename__ = 'users'
 
-    serialize_rules = ('-_password_hash',)
+    serialize_rules = ('-_password_hash', '-categories.user', '-habits.user')
 
     id = db.Column(db.Integer, primary_key=True)
     username = db.Column(db.String, unique=True)
@@ -36,6 +36,8 @@ class User(db.Model, SerializerMixin):
 class Category(db.Model, SerializerMixin):
     __tablename__ = 'categories'
 
+    serialize_rules = ('-habits.category', '-user.categories')
+
     id = db.Column(db.Integer, primary_key=True)
     name = db.Column(db.String, nullable=False)
     user_id = db.Column(db.Integer, db.ForeignKey('users.id'), nullable=False)
@@ -45,6 +47,8 @@ class Category(db.Model, SerializerMixin):
 
 class Habit(db.Model, SerializerMixin):
     __tablename__ = 'habits'
+
+    serialize_rules = ('-logs.habit', '-data.habit', '-category.habits', '-user.habits')
 
     id = db.Column(db.Integer, primary_key=True)
     name = db.Column(db.String, nullable=False)
@@ -59,6 +63,8 @@ class Habit(db.Model, SerializerMixin):
 class HabitLog(db.Model, SerializerMixin):
     __tablename__ = 'habit_logs'
 
+    serialize_rules = ('-habit.logs', '-habit_data.habit_log')
+
     id = db.Column(db.Integer, primary_key=True)
     habit_id = db.Column(db.Integer, db.ForeignKey('habits.id'), nullable=False)
     log_date = db.Column(db.DateTime, nullable=False)
@@ -70,6 +76,8 @@ class HabitLog(db.Model, SerializerMixin):
 
 class HabitData(db.Model, SerializerMixin):
     __tablename__ = 'habit_data'
+
+    serialize_rules = ('-habit.logs', '-habit_data.habit_log')
 
     id = db.Column(db.Integer, primary_key=True)
     log_id = db.Column(db.Integer, db.ForeignKey('habit_logs.id'), nullable=False)

@@ -6,9 +6,11 @@ import { FaChessBoard } from "react-icons/fa6";
 import { MdEdit } from "react-icons/md";
 import { FaChess } from "react-icons/fa";
 import { FaChessPawn } from "react-icons/fa";
+import { FaChessKnight } from "react-icons/fa";
+import { FaChessBishop } from "react-icons/fa6";
 
-function SideBar({ categories }) {
-  const { user } = useContext(MyContext);
+function SideBar() {
+  const { user, categories } = useContext(MyContext);
   return (
     <aside className="sidebar">
       {/* User profile section */}
@@ -33,23 +35,29 @@ function SideBar({ categories }) {
       {/* Filter through different views of habits (Today, Week, Month etc...) */}
       <div className="sidebar-section">
         <div className="sidebar-section-title">
-          <Link to="/views" className="sidebar-link">
-            <FaChess className="sidebar-icon" />
-            Views
-          </Link>
+          {/* <Link to="/views" className="sidebar-link"> */}
+          <FaChess className="sidebar-icon" />
+          Views
+          {/* </Link> */}
         </div>
         <ul className="sidebar-nav">
           <li className="sidebar-item">
-            <Link to="/today">
-              <FaChessPawn />
+            <Link to="/dashboard/today" className="sidebar-link">
+              <FaChessPawn className="sidebar-icon" />
               Today
             </Link>
           </li>
           <li className="sidebar-item">
-            <Link to="/week">This Week</Link>
+            <Link to="/dashboard/week" className="sidebar-link">
+              <FaChessKnight className="sidebar-icon" />
+              This Week
+            </Link>
           </li>
           <li className="sidebar-item">
-            <Link to="/month">This Month</Link>
+            <Link to="/dashboard/month" className="sidebar-link">
+              <FaChessBishop className="sidebar-icon" />
+              This Month
+            </Link>
           </li>
         </ul>
       </div>
@@ -67,7 +75,9 @@ function SideBar({ categories }) {
         </div>
         <ul className="sidebar-nav">
           <li className="sidebar-item">
-            <Link to="/all-habits">All Habits</Link>
+            <Link to="/all-habits" className="sidebar-link">
+              All Habits
+            </Link>
           </li>
           {/* <li className="sidebar-item">
             <Link to="/new-habit">Add New Habit</Link>
@@ -87,11 +97,16 @@ function SideBar({ categories }) {
           </Link>
         </div>
         <ul className="sidebar-nav">
-          {/* {categories.map((category) => (
-            <li key={category} className="sidebar-item">
-              <Link to={`/dashboard/categories/${category}`}>{category}</Link>
+          {categories.map((category) => (
+            <li key={category.name} className="sidebar-item">
+              <Link
+                to={`/dashboard/categories/${category.name}`}
+                className="sidebar-link"
+              >
+                {category.name}
+              </Link>
             </li>
-          ))} */}
+          ))}
         </ul>
       </div>
     </aside>

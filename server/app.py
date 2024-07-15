@@ -77,11 +77,32 @@ class Logout(Resource):
     def delete(self): 
         session.clear()
         return {'message': '204: No Content'}, 204
+    
+class CategoryResource(Resource):
+    def get(self):
+        user_id = session.get('user_id')
+        if not user_id:
+            return {'message': '401: Not Authorized'}, 401
+        
+        categories = Category.query.filter_by(user_id=user_id).all()
+        return [category.to_dict() for category in categories], 200
+
+    def post(self):
+        user_id = session.get('user_id')
+        if not user_id:
+            return {'message': '401: Not Authorized'}, 401
+        
+        data = request.get_json()
+        new_category = Category(name=data['name'], user_id=user_id)
+        db.session.add(new_category)
+        db.session.commit()
+        return new_category.to_dict(), 201
 
 api.add_resource(CheckSession, '/check_session')
 api.add_resource(Logout, "/logout")
 api.add_resource(Login, "/login")
 api.add_resource(SignUp, "/signup")
+api.add_resource(CategoryResource, '/categories')
 
 if __name__ == '__main__':
     app.run(port=5555, debug=True)

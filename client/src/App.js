@@ -12,6 +12,9 @@ import Categories from "./pages/Categories";
 import Habits from "./pages/Habits";
 import Footer from "./components/Footer";
 import Logout from "./pages/Logout";
+import Today from "./pages/Today";
+import Week from "./pages/Week";
+import Month from "./pages/Month";
 import "./App.css"; // Import the CSS file
 
 export default function App() {
@@ -28,6 +31,9 @@ export default function App() {
           <Route index element={<Dashboard />} />
           <Route path="categories" element={<Categories />} />
           <Route path="habits" element={<Habits />} />
+          <Route path="today" element={<Today />} />
+          <Route path="week" element={<Week />} />
+          <Route path="month" element={<Month />} />
         </Route>
         <Route path="logout" element={<Logout />} />
       </Routes>

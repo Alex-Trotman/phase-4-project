@@ -4,9 +4,10 @@ const MyContext = React.createContext();
 
 const MyProvider = (props) => {
   const [user, setUser] = useState(null);
+  const [categories, setCategories] = useState([]);
 
   useEffect(() => {
-    // Example: Check session on mount
+    // Check session on mount
     fetch("/check_session", {
       // credentials: "include",
     })
@@ -20,6 +21,24 @@ const MyProvider = (props) => {
       .then((data) => {
         if (!data.error) {
           setUser(data);
+          // Fetch categories once the user is set
+          fetch("/categories", {
+            // credentials: "include",
+          })
+            .then((response) => {
+              if (response.ok) {
+                return response.json();
+              } else {
+                throw new Error("Failed to fetch categories");
+              }
+            })
+            .then((categoriesData) => {
+              console.log("categoriesData", categoriesData);
+              setCategories(categoriesData);
+            })
+            .catch((error) => {
+              console.error("Error fetching categories", error);
+            });
         }
       })
       .catch((error) => {
@@ -28,7 +47,7 @@ const MyProvider = (props) => {
   }, []);
 
   return (
-    <MyContext.Provider value={{ user, setUser }}>
+    <MyContext.Provider value={{ user, setUser, categories, setCategories }}>
       {props.children}
     </MyContext.Provider>
   );

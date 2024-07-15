@@ -15,7 +15,7 @@ function Signup() {
       console.log("Line 15 login.js, user is set");
       navigate("/dashboard");
     }
-  }, [user]);
+  }, [user, navigate]);
 
   const handleSubmit = (e) => {
     e.preventDefault();
