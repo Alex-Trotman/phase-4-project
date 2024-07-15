@@ -1,5 +1,4 @@
 .sidebar {
-  /* width: 250px; */
   background-color: #2d2d2d;
   color: #fff;
   padding: 12px 30px;
@@ -41,7 +40,6 @@
   display: flex;
   align-items: center;
   padding: 10px;
-  /* border: 1px solid red; */
   border-radius: 4px;
   transition: background-color 0.3s;
 }
@@ -69,11 +67,17 @@
   color: #bbb;
 }
 
-.sidebar-section-title a {
+.sidebar-link {
+  display: flex;
+  align-items: center;
   color: inherit;
   text-decoration: none;
 }
 
-.sidebar-section-title a:hover {
+.sidebar-link:hover {
   text-decoration: underline;
+}
+
+.sidebar-icon {
+  margin-right: 8px;
 }
