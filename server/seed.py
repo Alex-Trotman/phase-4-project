@@ -46,17 +46,17 @@ if __name__ == '__main__':
                 db.session.add(category)
                 categories.append(category)
 
-        # db.session.commit()
+        db.session.commit()  # Commit categories to the database
 
-        # # Create habits for each category
+        # Create habits for each category
         # habits = []
         # for category in categories:
-        #     for _ in range(5):
+        #     for _ in range(2):
         #         habit = Habit(
         #             name=fake.word(),
         #             user_id=category.user_id,
         #             category_id=category.id,
-        #             metric_type=rc(['boolean', 'numeric', 'text'])
+        #             metric_type=rc(['boolean', 'numeric']) # , 'text'
         #         )
         #         db.session.add(habit)
         #         habits.append(habit)
