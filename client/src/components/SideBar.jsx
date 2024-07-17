@@ -1,4 +1,4 @@
-import React, { useContext } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import "../styles/SideBar.css";
 import { MyContext } from "../MyContext";
@@ -11,6 +11,16 @@ import { FaChessBishop } from "react-icons/fa6";
 
 function SideBar() {
   const { user, categories } = useContext(MyContext);
+  const [delayedCategories, setDelayedCategories] = useState(null);
+
+  useEffect(() => {
+    const timer = setTimeout(() => {
+      setDelayedCategories(categories);
+    }, 1000); // Waits for 1 second before setting the categories
+
+    return () => clearTimeout(timer); // Cleanup the timer
+  }, [categories]);
+
   return (
     <aside className="sidebar">
       {/* User profile section */}
@@ -35,10 +45,8 @@ function SideBar() {
       {/* Filter through different views of habits (Today, Week, Month etc...) */}
       <div className="sidebar-section">
         <div className="sidebar-section-title">
-          {/* <Link to="/views" className="sidebar-link"> */}
           <FaChess className="sidebar-icon" />
           Views
-          {/* </Link> */}
         </div>
         <ul className="sidebar-nav">
           <li className="sidebar-item">
@@ -79,9 +87,6 @@ function SideBar() {
               All Habits
             </Link>
           </li>
-          {/* <li className="sidebar-item">
-            <Link to="/new-habit">Add New Habit</Link>
-          </li> */}
         </ul>
       </div>
 
@@ -97,16 +102,20 @@ function SideBar() {
           </Link>
         </div>
         <ul className="sidebar-nav">
-          {categories.map((category) => (
-            <li key={category.name} className="sidebar-item">
-              <Link
-                to={`/dashboard/category/${category.id}`}
-                className="sidebar-link"
-              >
-                {category.name}
-              </Link>
-            </li>
-          ))}
+          {delayedCategories === null ? (
+            <li className="sidebar-item">Loading...</li>
+          ) : (
+            delayedCategories.map((category) => (
+              <li key={category.name} className="sidebar-item">
+                <Link
+                  to={`/dashboard/category/${category.id}`}
+                  className="sidebar-link"
+                >
+                  {category.name}
+                </Link>
+              </li>
+            ))
+          )}
         </ul>
       </div>
     </aside>

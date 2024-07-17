@@ -11,9 +11,6 @@ from config import app, db, api
 # Import your models
 from models import User, Category, Habit, HabitLog, HabitData
 
-# app.config['SECRET_KEY'] = 'your_secret_key_here'
-# Views go here!
-
 @app.route('/')
 def index():
     return '<h1>Project Server</h1>'
@@ -22,11 +19,9 @@ class CheckSession(Resource):
 
     def get(self):
         user_id = session.get('user_id')
-        print("RIGHT HERE", user_id)
         if user_id:
             user = User.query.filter(User.id == user_id).first()
             if user:
-                print(user)
                 return user.to_dict(), 200
             else:
                 return {'message': '401: Not Authorized'}, 401
@@ -49,7 +44,6 @@ class Login(Resource):
 
         if user and user.authenticate(password):
             session['user_id'] = user.id
-            print("Login successful: user_id set to", user.id)  # Debug print
             return user.to_dict(), 200
 
         return {'error': 'Invalid username or password'}, 401
@@ -70,7 +64,6 @@ class SignUp(Resource):
         db.session.commit()
 
         session['user_id'] = new_user.id
-        print("Signup successful: user_id set to", new_user.id)  # Debug print
         return new_user.to_dict(), 201
     
 class Logout(Resource):
@@ -98,11 +91,99 @@ class CategoryResource(Resource):
         db.session.commit()
         return new_category.to_dict(), 201
 
+    def put(self, category_id):
+        user_id = session.get('user_id')
+        if not user_id:
+            return {'message': '401: Not Authorized'}, 401
+        
+        data = request.get_json()
+        category = Category.query.filter_by(id=category_id, user_id=user_id).first()
+        if not category:
+            return {'message': '404: Not Found'}, 404
+        
+        category.name = data['name']
+        db.session.commit()
+        return category.to_dict(), 200
+
+    def delete(self):
+        user_id = session.get('user_id')
+        if not user_id:
+            return {'message': '401: Not Authorized'}, 401
+
+        data = request.get_json()
+        category_id = data.get('id')
+        category = Category.query.filter_by(id=category_id, user_id=user_id).first()
+        if not category:
+            return {'message': '404: Not Found'}, 404
+
+        db.session.delete(category)
+        db.session.commit()
+        return {'message': '204: No Content'}, 204
+
+class HabitResource(Resource):
+    def get(self):
+        user_id = session.get('user_id')
+        if not user_id:
+            return {'message': '401: Not Authorized'}, 401
+        
+        habits = Habit.query.filter_by(user_id=user_id).all()
+        return [habit.to_dict() for habit in habits], 200
+    
+    def post(self):
+        user_id = session.get('user_id')
+        if not user_id:
+            return {'message': '401: Not Authorized'}, 401
+        
+        data = request.get_json()
+        category_id = data.get('category_id')
+        if not category_id:
+            return {'message': '400: category_id is required'}, 400
+        
+        new_habit = Habit(
+            name=data['name'],
+            metric_type=data['type'],
+            user_id=user_id,
+            category_id=category_id
+        )
+        db.session.add(new_habit)
+        db.session.commit()
+        return new_habit.to_dict(), 201
+    
+    def put(self, habit_id):
+        user_id = session.get('user_id')
+        if not user_id:
+            return {'message': '401: Not Authorized'}, 401
+        
+        data = request.get_json()
+        habit = Habit.query.filter_by(id=habit_id, user_id=user_id).first()
+        if not habit:
+            return {'message': '404: Not Found'}, 404
+        
+        habit.name = data['name']
+        habit.metric_type = data['type']
+        habit.category_id = data.get('category_id', habit.category_id)
+        db.session.commit()
+        return habit.to_dict(), 200
+
+    def delete(self, habit_id):
+        user_id = session.get('user_id')
+        if not user_id:
+            return {'message': '401: Not Authorized'}, 401
+
+        habit = Habit.query.filter_by(id=habit_id, user_id=user_id).first()
+        if not habit:
+            return {'message': '404: Not Found'}, 404
+
+        db.session.delete(habit)
+        db.session.commit()
+        return {'message': '204: No Content'}, 204
+
 api.add_resource(CheckSession, '/check_session')
 api.add_resource(Logout, "/logout")
 api.add_resource(Login, "/login")
 api.add_resource(SignUp, "/signup")
-api.add_resource(CategoryResource, '/categories')
+api.add_resource(CategoryResource, '/categories', '/categories/<int:category_id>')
+api.add_resource(HabitResource, '/habits', '/habits/<int:habit_id>')
 
 if __name__ == '__main__':
     app.run(port=5555, debug=True)
