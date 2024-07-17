@@ -49,33 +49,33 @@ if __name__ == '__main__':
         db.session.commit()  # Commit categories to the database
 
         # Create habits for each category
-        # habits = []
-        # for category in categories:
-        #     for _ in range(2):
-        #         habit = Habit(
-        #             name=fake.word(),
-        #             user_id=category.user_id,
-        #             category_id=category.id,
-        #             metric_type=rc(['boolean', 'numeric']) # , 'text'
-        #         )
-        #         db.session.add(habit)
-        #         habits.append(habit)
+        habits = []
+        for category in categories:
+            for _ in range(2):
+                habit = Habit(
+                    name=fake.word(),
+                    user_id=category.user_id,
+                    category_id=category.id,
+                    metric_type=rc(['boolean', 'numeric']) # , 'text'
+                )
+                db.session.add(habit)
+                habits.append(habit)
 
-        # db.session.commit()
+        db.session.commit()
 
         # # Create habit logs for each habit
-        # habit_logs = []
-        # for habit in habits:
-        #     for _ in range(10):
-        #         log_date = datetime.now() - timedelta(days=randint(0, 30))
-        #         habit_log = HabitLog(
-        #             habit_id=habit.id,
-        #             log_date=log_date,
-        #             status=rc([True, False]) if habit.metric_type == 'boolean' else None,
-        #             note=fake.sentence() if rc([True, False]) else None
-        #         )
-        #         db.session.add(habit_log)
-        #         habit_logs.append(habit_log)
+        habit_logs = []
+        for habit in habits:
+            for _ in range(3):
+                log_date = datetime.now() - timedelta(days=randint(0, 30))
+                habit_log = HabitLog(
+                    habit_id=habit.id,
+                    log_date=log_date,
+                    status=rc([True, False]) if habit.metric_type == 'boolean' else None,
+                    note=fake.sentence() if rc([True, False]) else None
+                )
+                db.session.add(habit_log)
+                habit_logs.append(habit_log)
 
         # db.session.commit()
 

@@ -87,15 +87,21 @@ function Categories() {
     setEditingCategory(category);
   };
 
+  if (!user) {
+    return <div>Loading...</div>;
+  }
+
   return (
-    <div>
-      <h1>Hello {user.username} </h1>
-      <form onSubmit={handleSubmit} style={{ margin: "30px" }}>
-        <label htmlFor="name">{editingCategory ? "Edit Category Name" : "New Category Name"}</label>
+    <div className="categories-container">
+      <h1>Hello {user.username}</h1>
+      <form onSubmit={handleSubmit} className="category-input">
         <input
-          name="name"
+          type="text"
           value={categoryName}
           onChange={(e) => setCategoryName(e.target.value)}
+          placeholder={
+            editingCategory ? "Edit Category Name" : "New Category Name"
+          }
         />
         <button type="submit">{editingCategory ? "Update" : "Submit"}</button>
         {editingCategory && (
@@ -111,27 +117,31 @@ function Categories() {
           </button>
         )}
       </form>
-      <div>
-        <h2>Your Categories</h2>
-        <ul>
-          {categories.map((category) => (
-            <li key={category.id}>
-              {category.name}
-              <button
-                onClick={() => handleEdit(category)}
-                style={{ marginLeft: "10px" }}
-              >
-                Edit
-              </button>
-              <button
-                onClick={() => handleDelete(category.id)}
-                style={{ marginLeft: "10px" }}
-              >
-                Delete
-              </button>
-            </li>
-          ))}
-        </ul>
+      <div className="table-container">
+        <table className="category-table">
+          <thead>
+            <tr>
+              <th>Category Name</th>
+              <th>Actions</th>
+            </tr>
+          </thead>
+          <tbody>
+            {categories.map((category) => (
+              <tr key={category.id} className="category-item">
+                <td>{category.name}</td>
+                <td>
+                  <button onClick={() => handleEdit(category)}>Edit</button>
+                  <button
+                    onClick={() => handleDelete(category.id)}
+                    style={{ marginLeft: "10px" }}
+                  >
+                    Delete
+                  </button>
+                </td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
       </div>
     </div>
   );

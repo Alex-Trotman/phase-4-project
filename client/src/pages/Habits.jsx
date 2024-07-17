@@ -1,10 +1,10 @@
 import React, { useContext, useState, useEffect } from "react";
+import { Link } from "react-router-dom";
 import { MyContext } from "../MyContext";
 import "../styles/Habits.css";
 
 function Habits() {
-  const { user, categories } = useContext(MyContext);
-  const [habits, setHabits] = useState([]);
+  const { user, categories, habits, setHabits } = useContext(MyContext);
   const [newHabit, setNewHabit] = useState("");
   const [habitType, setHabitType] = useState("boolean");
   const [categoryId, setCategoryId] = useState("");
@@ -37,7 +37,7 @@ function Habits() {
     const habitData = {
       name: newHabit,
       type: habitType,
-      category_id: categoryId
+      category_id: categoryId,
     };
     if (editingHabit) {
       // Update habit
@@ -100,7 +100,9 @@ function Habits() {
       });
 
       if (response.ok) {
-        setHabits((prevHabits) => prevHabits.filter((habit) => habit.id !== id));
+        setHabits((prevHabits) =>
+          prevHabits.filter((habit) => habit.id !== id)
+        );
       } else {
         console.error("Failed to delete habit");
       }
@@ -126,11 +128,17 @@ function Habits() {
           onChange={(e) => setNewHabit(e.target.value)}
           placeholder="Enter new habit"
         />
-        <select value={habitType} onChange={(e) => setHabitType(e.target.value)}>
+        <select
+          value={habitType}
+          onChange={(e) => setHabitType(e.target.value)}
+        >
           <option value="boolean">Boolean</option>
           <option value="metric">Metric/Value</option>
         </select>
-        <select value={categoryId} onChange={(e) => setCategoryId(e.target.value)}>
+        <select
+          value={categoryId}
+          onChange={(e) => setCategoryId(e.target.value)}
+        >
           <option value="">Select Category</option>
           {categories.map((category) => (
             <option key={category.id} value={category.id}>
@@ -138,7 +146,9 @@ function Habits() {
             </option>
           ))}
         </select>
-        <button type="submit">{editingHabit ? "Update Habit" : "Add Habit"}</button>
+        <button type="submit">
+          {editingHabit ? "Update Habit" : "Add Habit"}
+        </button>
         {editingHabit && (
           <button
             type="button"
@@ -167,12 +177,19 @@ function Habits() {
           <tbody>
             {habits.map((habit) => (
               <tr key={habit.id} className="habit-item">
-                <td>{habit.name}</td>
+                <td>
+                  <Link to={`/dashboard/logs/${habit.id}`}>{habit.name}</Link>
+                </td>
                 <td>{habit.metric_type}</td>
-                <td>{categories.find((cat) => cat.id === habit.category_id)?.name}</td>
+                <td>
+                  {categories.find((cat) => cat.id === habit.category_id)?.name}
+                </td>
                 <td>
                   <button onClick={() => handleEdit(habit)}>Edit</button>
-                  <button onClick={() => handleDelete(habit.id)} style={{ marginLeft: "10px" }}>
+                  <button
+                    onClick={() => handleDelete(habit.id)}
+                    style={{ marginLeft: "10px" }}
+                  >
                     Delete
                   </button>
                 </td>

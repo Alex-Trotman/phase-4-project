@@ -10,6 +10,7 @@ import SideBar from "./components/SideBar";
 import DashboardHeader from "./components/DashboardHeader";
 import Categories from "./pages/Categories";
 import CategoryPage from "./pages/CategoryPage";
+import LogsPage from "./pages/LogsPage";
 import Habits from "./pages/Habits";
 import Footer from "./components/Footer";
 import Logout from "./pages/Logout";
@@ -36,6 +37,7 @@ export default function App() {
           <Route path="week" element={<Week />} />
           <Route path="month" element={<Month />} />
           <Route path="category/:categoryId" element={<CategoryPage />} />
+          <Route path="logs/:habitId" element={<LogsPage />} />
         </Route>
         <Route path="logout" element={<Logout />} />
       </Routes>

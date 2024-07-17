@@ -4,36 +4,100 @@ import { MyContext } from "../MyContext";
 import "../styles/Habits.css";
 
 function CategoryPage() {
-  const { categories } = useContext(MyContext);
+  const { categories, habits, setHabits } = useContext(MyContext);
   const { categoryId } = useParams();
 
-  const category = categories.find(cat => cat.id.toString() === categoryId);
+  const category = categories.find((cat) => cat.id.toString() === categoryId);
 
-  const [habits, setHabits] = useState([]);
   const [newHabit, setNewHabit] = useState("");
   const [habitType, setHabitType] = useState("boolean");
+  const [editingHabit, setEditingHabit] = useState(null);
 
-  const addHabit = () => {
-    if (newHabit.trim()) {
-      setHabits([
-        ...habits,
-        { id: Date.now(), name: newHabit, type: habitType },
-      ]);
-      setNewHabit("");
-      setHabitType("boolean");
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    if (!categoryId) {
+      alert("Please select a category");
+      return;
+    }
+    const habitData = {
+      name: newHabit,
+      type: habitType,
+      category_id: categoryId,
+    };
+    if (editingHabit) {
+      // Update habit
+      try {
+        const response = await fetch(`/habits/${editingHabit.id}`, {
+          method: "PUT",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify(habitData),
+        });
+
+        if (response.ok) {
+          const updatedHabit = await response.json();
+          setHabits((prevHabits) =>
+            prevHabits.map((habit) =>
+              habit.id === updatedHabit.id ? updatedHabit : habit
+            )
+          );
+          setNewHabit("");
+          setHabitType("boolean");
+          setEditingHabit(null);
+        } else {
+          console.error("Failed to update habit");
+        }
+      } catch (error) {
+        console.error("Error:", error);
+      }
+    } else {
+      // Create new habit
+      try {
+        const response = await fetch("/habits", {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify(habitData),
+        });
+
+        if (response.ok) {
+          const newHabitData = await response.json();
+          setHabits((prevHabits) => [...prevHabits, newHabitData]);
+          setNewHabit("");
+          setHabitType("boolean");
+        } else {
+          console.error("Failed to create habit");
+        }
+      } catch (error) {
+        console.error("Error:", error);
+      }
     }
   };
 
-  const deleteHabit = (id) => {
-    setHabits(habits.filter((habit) => habit.id !== id));
+  const handleDelete = async (id) => {
+    try {
+      const response = await fetch(`/habits/${id}`, {
+        method: "DELETE",
+      });
+
+      if (response.ok) {
+        setHabits((prevHabits) =>
+          prevHabits.filter((habit) => habit.id !== id)
+        );
+      } else {
+        console.error("Failed to delete habit");
+      }
+    } catch (error) {
+      console.error("Error:", error);
+    }
   };
 
-  const updateHabit = (id, newName, newType) => {
-    setHabits(
-      habits.map((habit) =>
-        habit.id === id ? { ...habit, name: newName, type: newType } : habit
-      )
-    );
+  const handleEdit = (habit) => {
+    setNewHabit(habit.name);
+    setHabitType(habit.metric_type);
+    setEditingHabit(habit);
   };
 
   return (
@@ -41,22 +105,38 @@ function CategoryPage() {
       {category ? (
         <>
           <h1>Category: {category.name}</h1>
-          <h1>Category ID: {categoryId}</h1>
           <div className="habit-input">
-            <input
-              type="text"
-              value={newHabit}
-              onChange={(e) => setNewHabit(e.target.value)}
-              placeholder="Enter new habit"
-            />
-            <select
-              value={habitType}
-              onChange={(e) => setHabitType(e.target.value)}
-            >
-              <option value="boolean">Boolean</option>
-              <option value="metric">Metric/Value</option>
-            </select>
-            <button onClick={addHabit}>Add Habit</button>
+            <form onSubmit={handleSubmit}>
+              <input
+                type="text"
+                value={newHabit}
+                onChange={(e) => setNewHabit(e.target.value)}
+                placeholder="Enter new habit"
+              />
+              <select
+                value={habitType}
+                onChange={(e) => setHabitType(e.target.value)}
+              >
+                <option value="boolean">Boolean</option>
+                <option value="metric">Metric/Value</option>
+              </select>
+              <button type="submit">
+                {editingHabit ? "Update Habit" : "Add Habit"}
+              </button>
+              {editingHabit && (
+                <button
+                  type="button"
+                  onClick={() => {
+                    setNewHabit("");
+                    setHabitType("boolean");
+                    setEditingHabit(null);
+                  }}
+                  style={{ marginLeft: "10px" }}
+                >
+                  Cancel
+                </button>
+              )}
+            </form>
           </div>
           <div className="table-container">
             <table className="habit-table">
@@ -68,33 +148,25 @@ function CategoryPage() {
                 </tr>
               </thead>
               <tbody>
-                {habits.map((habit) => (
-                  <tr key={habit.id} className="habit-item">
-                    <td>
-                      <input
-                        type="text"
-                        value={habit.name}
-                        onChange={(e) =>
-                          updateHabit(habit.id, e.target.value, habit.type)
-                        }
-                      />
-                    </td>
-                    <td>
-                      <select
-                        value={habit.type}
-                        onChange={(e) =>
-                          updateHabit(habit.id, habit.name, e.target.value)
-                        }
-                      >
-                        <option value="boolean">Boolean</option>
-                        <option value="metric">Metric/Value</option>
-                      </select>
-                    </td>
-                    <td>
-                      <button onClick={() => deleteHabit(habit.id)}>Delete</button>
-                    </td>
-                  </tr>
-                ))}
+                {habits
+                  .filter(
+                    (habit) => habit.category_id.toString() === categoryId
+                  )
+                  .map((habit) => (
+                    <tr key={habit.id} className="habit-item">
+                      <td>{habit.name}</td>
+                      <td>{habit.metric_type}</td>
+                      <td>
+                        <button onClick={() => handleEdit(habit)}>Edit</button>
+                        <button
+                          onClick={() => handleDelete(habit.id)}
+                          style={{ marginLeft: "10px" }}
+                        >
+                          Delete
+                        </button>
+                      </td>
+                    </tr>
+                  ))}
               </tbody>
             </table>
           </div>

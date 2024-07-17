@@ -3,6 +3,7 @@ from sqlalchemy.ext.associationproxy import association_proxy
 from config import db
 from sqlalchemy.ext.hybrid import hybrid_property
 import bcrypt
+from datetime import datetime
 
 class User(db.Model, SerializerMixin):
     __tablename__ = 'users'
@@ -13,8 +14,8 @@ class User(db.Model, SerializerMixin):
     username = db.Column(db.String, unique=True)
     _password_hash = db.Column(db.String, nullable=False)
 
-    categories = db.relationship('Category', backref='user', lazy=True)
-    habits = db.relationship('Habit', backref='user', lazy=True)
+    categories = db.relationship('Category', backref='user', lazy=True, cascade='all, delete-orphan')
+    habits = db.relationship('Habit', backref='user', lazy=True, cascade='all, delete-orphan')
 
     def __repr__(self):
         return f'User {self.username}, ID {self.id}'
@@ -25,7 +26,6 @@ class User(db.Model, SerializerMixin):
 
     @password_hash.setter
     def password_hash(self, password):
-        # utf-8 encoding and decoding is required in python 3
         password_hash = bcrypt.hashpw(password.encode('utf-8'), bcrypt.gensalt())
         self._password_hash = password_hash.decode('utf-8')
 
@@ -40,7 +40,6 @@ class User(db.Model, SerializerMixin):
             'habits': [habit.to_dict_simple() for habit in self.habits]
         }
 
-
 class Category(db.Model, SerializerMixin):
     __tablename__ = 'categories'
 
@@ -50,7 +49,7 @@ class Category(db.Model, SerializerMixin):
     name = db.Column(db.String, nullable=False)
     user_id = db.Column(db.Integer, db.ForeignKey('users.id'), nullable=False)
 
-    habits = db.relationship('Habit', backref='category', lazy=True)
+    habits = db.relationship('Habit', backref='category', lazy=True, cascade='all, delete-orphan')
 
     def to_dict(self):
         return {
@@ -66,7 +65,6 @@ class Category(db.Model, SerializerMixin):
             'name': self.name
         }
 
-
 class Habit(db.Model, SerializerMixin):
     __tablename__ = 'habits'
 
@@ -78,8 +76,8 @@ class Habit(db.Model, SerializerMixin):
     category_id = db.Column(db.Integer, db.ForeignKey('categories.id'), nullable=False)
     metric_type = db.Column(db.String, nullable=False) # 'boolean', 'numeric', 'text'
 
-    logs = db.relationship('HabitLog', backref='habit', lazy=True)
-    data = db.relationship('HabitData', backref='habit', lazy=True)
+    logs = db.relationship('HabitLog', backref='habit', lazy=True, cascade='all, delete-orphan')
+    data = db.relationship('HabitData', backref='habit', lazy=True, cascade='all, delete-orphan')
 
     def to_dict(self):
         return {
@@ -99,7 +97,6 @@ class Habit(db.Model, SerializerMixin):
             'metric_type': self.metric_type
         }
 
-
 class HabitLog(db.Model, SerializerMixin):
     __tablename__ = 'habit_logs'
 
@@ -111,13 +108,13 @@ class HabitLog(db.Model, SerializerMixin):
     status = db.Column(db.Boolean, nullable=True) # for boolean habits
     note = db.Column(db.Text, nullable=True) # optional note for the log entry
 
-    habit_data = db.relationship('HabitData', backref='habit_log', lazy=True)
+    habit_data = db.relationship('HabitData', backref='habit_log', lazy=True, cascade='all, delete-orphan')
 
     def to_dict(self):
         return {
             'id': self.id,
             'habit_id': self.habit_id,
-            'log_date': self.log_date,
+            'log_date': self.log_date.isoformat() if self.log_date else None,
             'status': self.status,
             'note': self.note,
             'habit_data': [data.to_dict_simple() for data in self.habit_data]
@@ -126,10 +123,9 @@ class HabitLog(db.Model, SerializerMixin):
     def to_dict_simple(self):
         return {
             'id': self.id,
-            'log_date': self.log_date,
+            'log_date': self.log_date.isoformat() if self.log_date else None,
             'status': self.status
         }
-
 
 class HabitData(db.Model, SerializerMixin):
     __tablename__ = 'habit_data'

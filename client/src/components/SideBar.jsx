@@ -81,13 +81,13 @@ function SideBar() {
             Habits
           </Link>
         </div>
-        <ul className="sidebar-nav">
+        {/* <ul className="sidebar-nav">
           <li className="sidebar-item">
             <Link to="/all-habits" className="sidebar-link">
               All Habits
             </Link>
           </li>
-        </ul>
+        </ul> */}
       </div>
 
       {/* Separation line */}

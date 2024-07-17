@@ -1,8 +1,8 @@
-"""empty message
+"""Add cascade delete to relationships
 
-Revision ID: 1478a2690d7d
+Revision ID: c667224f3583
 Revises: 
-Create Date: 2024-07-11 17:34:45.847562
+Create Date: 2024-07-17 12:13:40.834451
 
 """
 from alembic import op
@@ -10,7 +10,7 @@ import sqlalchemy as sa
 
 
 # revision identifiers, used by Alembic.
-revision = '1478a2690d7d'
+revision = 'c667224f3583'
 down_revision = None
 branch_labels = None
 depends_on = None
