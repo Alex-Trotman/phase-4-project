@@ -1,5 +1,5 @@
 import React, { useContext, useState } from "react";
-import { useParams } from "react-router-dom";
+import { useParams, Link } from "react-router-dom";
 import { MyContext } from "../MyContext";
 import "../styles/Habits.css";
 
@@ -154,7 +154,9 @@ function CategoryPage() {
                   )
                   .map((habit) => (
                     <tr key={habit.id} className="habit-item">
-                      <td>{habit.name}</td>
+                      <td>
+                        <Link to={`/dashboard/logs/${habit.id}`} className="habit-link">{habit.name}</Link>
+                      </td>
                       <td>{habit.metric_type}</td>
                       <td>
                         <button onClick={() => handleEdit(habit)}>Edit</button>

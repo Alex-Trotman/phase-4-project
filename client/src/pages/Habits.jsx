@@ -8,7 +8,7 @@ function Habits() {
   const [newHabit, setNewHabit] = useState("");
   const [habitType, setHabitType] = useState("boolean");
   const [categoryId, setCategoryId] = useState("");
-  const [editingHabit, setEditingHabit] = useState(null);
+  const [editingHabit, setEditingHabit] =useState(null);
 
   useEffect(() => {
     const fetchHabits = async () => {
@@ -178,7 +178,7 @@ function Habits() {
             {habits.map((habit) => (
               <tr key={habit.id} className="habit-item">
                 <td>
-                  <Link to={`/dashboard/logs/${habit.id}`}>{habit.name}</Link>
+                  <Link to={`/dashboard/logs/${habit.id}`} className="habit-link">{habit.name}</Link>
                 </td>
                 <td>{habit.metric_type}</td>
                 <td>

@@ -1,4 +1,5 @@
 import React, { useContext, useState } from "react";
+import { Link } from "react-router-dom";
 import { MyContext } from "../MyContext";
 import "../styles/Categories.css";
 
@@ -128,7 +129,11 @@ function Categories() {
           <tbody>
             {categories.map((category) => (
               <tr key={category.id} className="category-item">
-                <td>{category.name}</td>
+                <td>
+                  <Link to={`/dashboard/category/${category.id}`} className="category-link">
+                    {category.name}
+                  </Link>
+                </td>
                 <td>
                   <button onClick={() => handleEdit(category)}>Edit</button>
                   <button

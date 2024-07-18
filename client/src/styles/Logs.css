@@ -1,0 +1,67 @@
+.log-form {
+    display: flex;
+    flex-direction: column;
+    margin-bottom: 20px;
+  }
+  
+  .log-form label {
+    margin-bottom: 10px;
+  }
+  
+  .log-form input,
+  .log-form select {
+    padding: 10px;
+    border-radius: 4px;
+    border: 1px solid #ccc;
+  }
+  
+  .log-form button {
+    padding: 10px 20px;
+    border: none;
+    border-radius: 4px;
+    background-color: #28a745;
+    color: #fff;
+    cursor: pointer;
+    transition: background-color 0.3s;
+  }
+  
+  .log-form button:hover {
+    background-color: #218838;
+  }
+  
+  .table-container {
+    width: 100%;
+    max-width: 1200px;
+    overflow-x: auto;
+  }
+  
+  .log-table {
+    width: 100%;
+    border-collapse: collapse;
+  }
+  
+  .log-table th,
+  .log-table td {
+    padding: 10px;
+    border: 1px solid #ccc;
+    text-align: left;
+  }
+  
+  .log-table th {
+    background-color: #f2f2f2;
+  }
+  
+  .log-item input {
+    width: 100%;
+    padding: 10px;
+    border-radius: 4px;
+    border: 1px solid #ccc;
+  }
+  
+  .log-item select {
+    width: 100%;
+    padding: 10px;
+    border-radius: 4px;
+    border: 1px solid #ccc;
+  }
+  

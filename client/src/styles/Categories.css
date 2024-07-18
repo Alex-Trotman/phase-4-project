@@ -79,3 +79,14 @@
 .category-item button:hover {
   background-color: #c82333;
 }
+
+.category-link {
+  text-decoration: none;
+  color: inherit;
+}
+
+.category-item:hover .category-link {
+  cursor: pointer;
+  text-decoration: underline;
+  color: #007bff;
+}
