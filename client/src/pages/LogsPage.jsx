@@ -4,19 +4,20 @@ import { MyContext } from "../MyContext";
 import "../styles/Logs.css";
 
 function LogsPage() {
-  const { habits, setHabits } = useContext(MyContext);
+  const { habits } = useContext(MyContext);
   const { habitId } = useParams();
   const habit = habits.find((habit) => habit.id.toString() === habitId);
   const [logs, setLogs] = useState([]);
   const [newLog, setNewLog] = useState("");
   const [logDate, setLogDate] = useState("");
-  
+
   useEffect(() => {
     const fetchLogs = async () => {
       try {
         const response = await fetch(`/habits/${habitId}/logs`);
         if (response.ok) {
           const data = await response.json();
+          data.sort((a, b) => new Date(a.log_date) - new Date(b.log_date)); // Sort logs by date
           setLogs(data);
         } else {
           console.error("Failed to fetch logs");
@@ -33,7 +34,7 @@ function LogsPage() {
     e.preventDefault();
 
     const logData = {
-      value: newLog,
+      status: newLog === "true" ? true : newLog === "false" ? false : newLog,
       log_date: logDate,
     };
 
@@ -48,7 +49,13 @@ function LogsPage() {
 
       if (response.ok) {
         const newLog = await response.json();
-        setLogs((prevLogs) => [...prevLogs, newLog]);
+        setLogs((prevLogs) => {
+          const updatedLogs = [...prevLogs, newLog];
+          updatedLogs.sort(
+            (a, b) => new Date(a.log_date) - new Date(b.log_date)
+          ); // Sort logs by date
+          return updatedLogs;
+        });
         setNewLog("");
         setLogDate("");
       } else {
@@ -57,6 +64,16 @@ function LogsPage() {
     } catch (error) {
       console.error("Error:", error);
     }
+  };
+
+  const formatDateTime = (dateTime) => {
+    const date = new Date(dateTime);
+    const year = date.getFullYear();
+    const month = String(date.getMonth() + 1).padStart(2, "0");
+    const day = String(date.getDate()).padStart(2, "0");
+    const hours = String(date.getHours()).padStart(2, "0");
+    const minutes = String(date.getMinutes()).padStart(2, "0");
+    return `${year}-${month}-${day} ${hours}:${minutes}`;
   };
 
   return (
@@ -108,13 +125,13 @@ function LogsPage() {
               <tbody>
                 {logs.map((log) => (
                   <tr key={log.id} className="log-item">
-                    <td>{log.log_date}</td>
+                    <td>{formatDateTime(log.log_date)}</td>
                     <td>
-                      {habit.metric_type === "boolean" ? (
-                        log.value === "true" ? "✔️" : "❌"
-                      ) : (
-                        log.value
-                      )}
+                      {habit.metric_type === "boolean"
+                        ? String(log.status) === "true"
+                          ? "✔️"
+                          : "❌"
+                        : log.status}
                     </td>
                   </tr>
                 ))}
