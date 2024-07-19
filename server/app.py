@@ -220,6 +220,67 @@ class HabitLogResource(Resource):
         db.session.commit()
         return {'message': '204: No Content'}, 204
 
+class HabitDataResource(Resource):
+    def post(self, habit_id):
+        user_id = session.get('user_id')
+        if not user_id:
+            return {'message': '401: Not Authorized'}, 401
+        habit = Habit.query.filter_by(id=habit_id, user_id=user_id).first()
+        if not habit:
+            return {'message': '404: Not Found'}, 404
+        data = request.get_json()
+        
+        try:
+            log_date = datetime.strptime(data['log_date'], '%Y-%m-%d')
+        except ValueError:
+            return {'message': 'Invalid date format, expected YYYY-MM-DD'}, 400
+
+        new_log = HabitLog(
+            habit_id=habit_id,
+            log_date=log_date,
+            status=None,  # Since it's a metric log, status can be None
+            note=data.get('note')
+        )
+        db.session.add(new_log)
+        db.session.commit()
+
+        new_data = HabitData(
+            log_id=new_log.id,
+            habit_id=habit_id,
+            metric_value=data.get('metric_value'),
+            metric_text=data.get('metric_text')
+        )
+        db.session.add(new_data)
+        db.session.commit()
+        return new_data.to_dict(), 201
+
+    def put(self, data_id):
+        user_id = session.get('user_id')
+        if not user_id:
+            return {'message': '401: Not Authorized'}, 401
+        data = HabitData.query.join(Habit).filter(Habit.user_id == user_id, HabitData.id == data_id).first()
+        if not data:
+            return {'message': '404: Not Found'}, 404
+        data_request = request.get_json()
+        
+        data.metric_value = data_request.get('metric_value', data.metric_value)
+        data.metric_text = data_request.get('metric_text', data.metric_text)
+        db.session.commit()
+        return data.to_dict(), 200
+
+    def delete(self, data_id):
+        user_id = session.get('user_id')
+        if not user_id:
+            return {'message': '401: Not Authorized'}, 401
+        data = HabitData.query.join(Habit).filter(Habit.user_id == user_id, HabitData.id == data_id).first()
+        if not data:
+            return {'message': '404: Not Found'}, 404
+        db.session.delete(data)
+        db.session.commit()
+        return {'message': '204: No Content'}, 204
+
+
+
 api.add_resource(CheckSession, '/check_session')
 api.add_resource(Logout, "/logout")
 api.add_resource(Login, "/login")
@@ -227,6 +288,7 @@ api.add_resource(SignUp, "/signup")
 api.add_resource(CategoryResource, '/categories', '/categories/<int:category_id>')
 api.add_resource(HabitResource, '/habits', '/habits/<int:habit_id>')
 api.add_resource(HabitLogResource, '/habits/<int:habit_id>/logs', '/logs/<int:log_id>')
+api.add_resource(HabitDataResource, '/habits/<int:habit_id>/data', '/data/<int:data_id>')
 
 if __name__ == '__main__':
     app.run(port=5555, debug=True)

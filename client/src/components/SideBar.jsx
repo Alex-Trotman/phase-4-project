@@ -2,24 +2,31 @@ import React, { useContext, useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import "../styles/SideBar.css";
 import { MyContext } from "../MyContext";
-import { FaChessBoard } from "react-icons/fa6";
+import {
+  FaChessBoard,
+  FaChess,
+  FaChessPawn,
+  FaChessKnight,
+  FaChessBishop,
+} from "react-icons/fa";
 import { MdEdit } from "react-icons/md";
-import { FaChess } from "react-icons/fa";
-import { FaChessPawn } from "react-icons/fa";
-import { FaChessKnight } from "react-icons/fa";
-import { FaChessBishop } from "react-icons/fa6";
 
 function SideBar() {
-  const { user, categories } = useContext(MyContext);
-  const [delayedCategories, setDelayedCategories] = useState(null);
+  const { user, categories, fetchCategories } = useContext(MyContext);
+  const [delayedCategories, setDelayedCategories] = useState([]);
 
   useEffect(() => {
-    const timer = setTimeout(() => {
+    if (categories.length > 0) {
       setDelayedCategories(categories);
-    }, 1000); // Waits for 1 second before setting the categories
+    } else {
+      fetchCategories();
+      const timer = setTimeout(() => {
+        setDelayedCategories(categories);
+      }, 2000); // Waits for 2 seconds before setting the categories
 
-    return () => clearTimeout(timer); // Cleanup the timer
-  }, [categories]);
+      return () => clearTimeout(timer); // Cleanup the timer
+    }
+  }, [categories, fetchCategories]);
 
   return (
     <aside className="sidebar">
@@ -81,13 +88,6 @@ function SideBar() {
             Habits
           </Link>
         </div>
-        {/* <ul className="sidebar-nav">
-          <li className="sidebar-item">
-            <Link to="/all-habits" className="sidebar-link">
-              All Habits
-            </Link>
-          </li>
-        </ul> */}
       </div>
 
       {/* Separation line */}
@@ -102,11 +102,11 @@ function SideBar() {
           </Link>
         </div>
         <ul className="sidebar-nav">
-          {delayedCategories === null ? (
+          {delayedCategories.length === 0 ? (
             <li className="sidebar-item">Loading...</li>
           ) : (
             delayedCategories.map((category) => (
-              <li key={category.name} className="sidebar-item">
+              <li key={category.id} className="sidebar-item">
                 <Link
                   to={`/dashboard/category/${category.id}`}
                   className="sidebar-link"

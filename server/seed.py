@@ -77,24 +77,24 @@ if __name__ == '__main__':
                 db.session.add(habit_log)
                 habit_logs.append(habit_log)
 
-        # db.session.commit()
+        db.session.commit()
 
         # # Create habit data for each habit log
-        # for habit_log in habit_logs:
-        #     if habit_log.habit.metric_type == 'numeric':
-        #         habit_data = HabitData(
-        #             log_id=habit_log.id,
-        #             habit_id=habit_log.habit_id,
-        #             metric_value=randint(1, 100)
-        #         )
-        #         db.session.add(habit_data)
-        #     elif habit_log.habit.metric_type == 'text':
-        #         habit_data = HabitData(
-        #             log_id=habit_log.id,
-        #             habit_id=habit_log.habit_id,
-        #             metric_text=fake.sentence()
-        #         )
-        #         db.session.add(habit_data)
+        for habit_log in habit_logs:
+            if habit_log.habit.metric_type == 'numeric':
+                habit_data = HabitData(
+                    log_id=habit_log.id,
+                    habit_id=habit_log.habit_id,
+                    metric_value=randint(1, 100)
+                )
+                db.session.add(habit_data)
+            elif habit_log.habit.metric_type == 'text':
+                habit_data = HabitData(
+                    log_id=habit_log.id,
+                    habit_id=habit_log.habit_id,
+                    metric_text=fake.sentence()
+                )
+                db.session.add(habit_data)
 
         db.session.commit()
 

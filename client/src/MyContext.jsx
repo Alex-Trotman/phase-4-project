@@ -7,6 +7,23 @@ const MyProvider = (props) => {
   const [categories, setCategories] = useState([]);
   const [habits, setHabits] = useState([]);
 
+  const fetchCategories = async () => {
+    try {
+      const response = await fetch("/categories", {
+        // credentials: "include",
+      });
+      if (response.ok) {
+        const categoriesData = await response.json();
+        console.log("categoriesData", categoriesData);
+        setCategories(categoriesData);
+      } else {
+        throw new Error("Failed to fetch categories");
+      }
+    } catch (error) {
+      console.error("Error fetching categories", error);
+    }
+  };
+
   useEffect(() => {
     // Check session on mount
     fetch("/check_session", {
@@ -22,25 +39,7 @@ const MyProvider = (props) => {
       .then((data) => {
         if (!data.error) {
           setUser(data);
-
-          // Fetch categories once the user is set
-          fetch("/categories", {
-            // credentials: "include",
-          })
-            .then((response) => {
-              if (response.ok) {
-                return response.json();
-              } else {
-                throw new Error("Failed to fetch categories");
-              }
-            })
-            .then((categoriesData) => {
-              console.log("categoriesData", categoriesData);
-              setCategories(categoriesData);
-            })
-            .catch((error) => {
-              console.error("Error fetching categories", error);
-            });
+          fetchCategories();
 
           // Fetch habits once the user is set
           fetch("/habits", {
@@ -69,7 +68,15 @@ const MyProvider = (props) => {
 
   return (
     <MyContext.Provider
-      value={{ user, setUser, categories, setCategories, habits, setHabits }}
+      value={{
+        user,
+        setUser,
+        categories,
+        setCategories,
+        habits,
+        setHabits,
+        fetchCategories,
+      }}
     >
       {props.children}
     </MyContext.Provider>
