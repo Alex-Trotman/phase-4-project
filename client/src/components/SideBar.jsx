@@ -16,17 +16,15 @@ function SideBar() {
   const [delayedCategories, setDelayedCategories] = useState([]);
 
   useEffect(() => {
-    if (categories.length > 0) {
+    const fetchAndSetCategories = async () => {
+      if (categories.length === 0) {
+        await fetchCategories();
+      }
       setDelayedCategories(categories);
-    } else {
-      fetchCategories();
-      const timer = setTimeout(() => {
-        setDelayedCategories(categories);
-      }, 2000); // Waits for 2 seconds before setting the categories
+    };
 
-      return () => clearTimeout(timer); // Cleanup the timer
-    }
-  }, [categories, fetchCategories]);
+    fetchAndSetCategories();
+  }, [categories.length, fetchCategories]);
 
   return (
     <aside className="sidebar">

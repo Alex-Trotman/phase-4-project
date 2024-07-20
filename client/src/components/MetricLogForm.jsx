@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 
-const MetricLogForm = ({ habitId, onNewLog }) => {
+const MetricLogForm = ({ habitId, habitData, setHabitData, onNewLog }) => {
   const [newLog, setNewLog] = useState("");
   const [logDate, setLogDate] = useState("");
 
@@ -34,28 +34,52 @@ const MetricLogForm = ({ habitId, onNewLog }) => {
     }
   };
 
+  const sortedHabitData = habitData
+    .slice()
+    .sort((a, b) => new Date(b.log_date) - new Date(a.log_date));
+
   return (
-    <form onSubmit={handleSubmit} className="log-form">
-      <label>
-        Log Date:
-        <input
-          type="date"
-          value={logDate}
-          onChange={(e) => setLogDate(e.target.value)}
-          required
-        />
-      </label>
-      <label>
-        Value:
-        <input
-          type="number"
-          value={newLog}
-          onChange={(e) => setNewLog(e.target.value)}
-          required
-        />
-      </label>
-      <button type="submit">Add Log</button>
-    </form>
+    <>
+      <form onSubmit={handleSubmit} className="log-form">
+        <label>
+          Log Date:
+          <input
+            type="date"
+            value={logDate}
+            onChange={(e) => setLogDate(e.target.value)}
+            required
+          />
+        </label>
+        <label>
+          Value:
+          <input
+            type="number"
+            value={newLog}
+            onChange={(e) => setNewLog(e.target.value)}
+            required
+          />
+        </label>
+        <button type="submit">Add Log</button>
+      </form>
+      <div className="table-container">
+        <table className="log-table">
+          <thead>
+            <tr>
+              <th>Date</th>
+              <th>Value</th>
+            </tr>
+          </thead>
+          <tbody>
+            {sortedHabitData.map((data) => (
+              <tr key={data.id} className="log-item">
+                <td>{new Date(data.log_date).toLocaleDateString()}</td>
+                <td>{data.metric_value}</td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
+      </div>
+    </>
   );
 };
 

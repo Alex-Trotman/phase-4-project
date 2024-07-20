@@ -221,6 +221,30 @@ class HabitLogResource(Resource):
         return {'message': '204: No Content'}, 204
 
 class HabitDataResource(Resource):
+    def get(self, habit_id):
+        user_id = session.get('user_id')
+        if not user_id:
+            return {'message': '401: Not Authorized'}, 401
+
+        habit = Habit.query.filter_by(id=habit_id, user_id=user_id).first()
+        if not habit:
+            return {'message': '404: Not Found'}, 404
+
+        habit_data_with_logs = db.session.query(HabitData, HabitLog).join(HabitLog, HabitData.log_id == HabitLog.id).filter(HabitData.habit_id == habit_id).all()
+        result = [
+            {
+                'id': data.id,
+                'log_id': data.log_id,
+                'habit_id': data.habit_id,
+                'metric_value': data.metric_value,
+                'metric_text': data.metric_text,
+                'log_date': log.log_date.isoformat() if log.log_date else None
+            }
+            for data, log in habit_data_with_logs
+        ]
+
+        return result, 200
+
     def post(self, habit_id):
         user_id = session.get('user_id')
         if not user_id:
@@ -229,7 +253,7 @@ class HabitDataResource(Resource):
         if not habit:
             return {'message': '404: Not Found'}, 404
         data = request.get_json()
-        
+
         try:
             log_date = datetime.strptime(data['log_date'], '%Y-%m-%d')
         except ValueError:
@@ -252,7 +276,11 @@ class HabitDataResource(Resource):
         )
         db.session.add(new_data)
         db.session.commit()
-        return new_data.to_dict(), 201
+    
+        response_data = new_data.to_dict()
+        response_data['log_date'] = new_log.log_date.isoformat()
+        return response_data, 201
+
 
     def put(self, data_id):
         user_id = session.get('user_id')
@@ -262,7 +290,7 @@ class HabitDataResource(Resource):
         if not data:
             return {'message': '404: Not Found'}, 404
         data_request = request.get_json()
-        
+
         data.metric_value = data_request.get('metric_value', data.metric_value)
         data.metric_text = data_request.get('metric_text', data.metric_text)
         db.session.commit()
@@ -278,6 +306,9 @@ class HabitDataResource(Resource):
         db.session.delete(data)
         db.session.commit()
         return {'message': '204: No Content'}, 204
+
+
+
 
 
 

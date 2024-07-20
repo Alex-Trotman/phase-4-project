@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 
-const BooleanLogForm = ({ habitId, onNewLog }) => {
+const BooleanLogForm = ({ habitId, logs, setLogs, onNewLog }) => {
   const [newLog, setNewLog] = useState("");
   const [logDate, setLogDate] = useState("");
 
@@ -8,8 +8,8 @@ const BooleanLogForm = ({ habitId, onNewLog }) => {
     e.preventDefault();
 
     const logData = {
-      status: newLog === "true" ? true : newLog === "false" ? false : null,
       log_date: logDate,
+      status: newLog === "true",
     };
 
     try {
@@ -34,31 +34,55 @@ const BooleanLogForm = ({ habitId, onNewLog }) => {
     }
   };
 
+  const sortedLogs = logs
+    .slice()
+    .sort((a, b) => new Date(b.log_date) - new Date(a.log_date));
+
   return (
-    <form onSubmit={handleSubmit} className="log-form">
-      <label>
-        Log Date:
-        <input
-          type="date"
-          value={logDate}
-          onChange={(e) => setLogDate(e.target.value)}
-          required
-        />
-      </label>
-      <label>
-        Value:
-        <select
-          value={newLog}
-          onChange={(e) => setNewLog(e.target.value)}
-          required
-        >
-          <option value="">Select</option>
-          <option value="true">True</option>
-          <option value="false">False</option>
-        </select>
-      </label>
-      <button type="submit">Add Log</button>
-    </form>
+    <>
+      <form onSubmit={handleSubmit} className="log-form">
+        <label>
+          Log Date:
+          <input
+            type="date"
+            value={logDate}
+            onChange={(e) => setLogDate(e.target.value)}
+            required
+          />
+        </label>
+        <label>
+          Status:
+          <select
+            value={newLog}
+            onChange={(e) => setNewLog(e.target.value)}
+            required
+          >
+            <option value="">Select</option>
+            <option value="true">True</option>
+            <option value="false">False</option>
+          </select>
+        </label>
+        <button type="submit">Add Log</button>
+      </form>
+      <div className="table-container">
+        <table className="log-table">
+          <thead>
+            <tr>
+              <th>Date</th>
+              <th>Value</th>
+            </tr>
+          </thead>
+          <tbody>
+            {sortedLogs.map((log) => (
+              <tr key={log.id} className="log-item">
+                <td>{new Date(log.log_date).toLocaleDateString()}</td>
+                <td>{log.status ? "✔️" : "❌"}</td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
+      </div>
+    </>
   );
 };
 

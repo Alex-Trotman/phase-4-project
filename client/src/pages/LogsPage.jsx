@@ -32,23 +32,25 @@ function LogsPage() {
   }, [habitId]);
 
   useEffect(() => {
-    const fetchHabitData = async () => {
-      try {
-        const response = await fetch(`/habits/${habitId}/data`);
-        if (response.ok) {
-          const data = await response.json();
-          data.sort((a, b) => new Date(a.log_date) - new Date(b.log_date)); // Sort habit data by date
-          setHabitData(data);
-        } else {
-          console.error("Failed to fetch habit data");
+    if (habit && habit.metric_type === "numeric") {
+      const fetchHabitData = async () => {
+        try {
+          const response = await fetch(`/habits/${habitId}/data`);
+          if (response.ok) {
+            const data = await response.json();
+            data.sort((a, b) => new Date(a.log_date) - new Date(b.log_date)); // Sort habit data by date
+            setHabitData(data);
+          } else {
+            console.error("Failed to fetch habit data");
+          }
+        } catch (error) {
+          console.error("Error:", error);
         }
-      } catch (error) {
-        console.error("Error:", error);
-      }
-    };
+      };
 
-    fetchHabitData();
-  }, [habitId]);
+      fetchHabitData();
+    }
+  }, [habit, habitId]);
 
   const handleNewLog = (newLog) => {
     setLogs((prevLogs) => {
@@ -66,51 +68,26 @@ function LogsPage() {
     });
   };
 
-  const formatDateTime = (dateTime) => {
-    const date = new Date(dateTime);
-    const year = date.getFullYear();
-    const month = String(date.getMonth() + 1).padStart(2, "0");
-    const day = String(date.getDate()).padStart(2, "0");
-    const hours = String(date.getHours()).padStart(2, "0");
-    const minutes = String(date.getMinutes()).padStart(2, "0");
-    return `${year}-${month}-${day} ${hours}:${minutes}`;
-  };
-
   return (
     <div>
       {habit ? (
         <>
           <h1>Habit: {habit.name}</h1>
           {habit.metric_type === "boolean" ? (
-            <BooleanLogForm habitId={habitId} onNewLog={handleNewLog} />
+            <BooleanLogForm
+              habitId={habitId}
+              logs={logs}
+              setLogs={setLogs}
+              onNewLog={handleNewLog}
+            />
           ) : (
-            <MetricLogForm habitId={habitId} onNewLog={handleNewData} />
+            <MetricLogForm
+              habitId={habitId}
+              habitData={habitData}
+              setHabitData={setHabitData}
+              onNewLog={handleNewData}
+            />
           )}
-          <div className="table-container">
-            <table className="log-table">
-              <thead>
-                <tr>
-                  <th>Date</th>
-                  <th>Value</th>
-                </tr>
-              </thead>
-              <tbody>
-                {habit.metric_type === "boolean"
-                  ? logs.map((log) => (
-                      <tr key={log.id} className="log-item">
-                        <td>{formatDateTime(log.log_date)}</td>
-                        <td>{String(log.status) === "true" ? "✔️" : "❌"}</td>
-                      </tr>
-                    ))
-                  : habitData.map((data) => (
-                      <tr key={data.id} className="log-item">
-                        <td>{formatDateTime(data.log_date)}</td>
-                        <td>{String(data.metric_value)}</td>
-                      </tr>
-                    ))}
-              </tbody>
-            </table>
-          </div>
         </>
       ) : (
         <h1>Habit not found</h1>
