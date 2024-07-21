@@ -13,18 +13,20 @@ function LogsPage() {
   const [habitData, setHabitData] = useState([]);
 
   useEffect(() => {
+    console.log("Fetching logs for habit ID:", habitId);
     const fetchLogs = async () => {
       try {
         const response = await fetch(`/habits/${habitId}/logs`);
         if (response.ok) {
           const data = await response.json();
+          console.log("Fetched logs data:", data);
           data.sort((a, b) => new Date(a.log_date) - new Date(b.log_date)); // Sort logs by date
           setLogs(data);
         } else {
           console.error("Failed to fetch logs");
         }
       } catch (error) {
-        console.error("Error:", error);
+        console.error("Error fetching logs:", error);
       }
     };
 
@@ -32,19 +34,21 @@ function LogsPage() {
   }, [habitId]);
 
   useEffect(() => {
-    if (habit && habit.metric_type === "numeric") {
+    if (habit && habit.metric_type === "metric") {
+      console.log("Fetching habit data for habit ID:", habitId);
       const fetchHabitData = async () => {
         try {
           const response = await fetch(`/habits/${habitId}/data`);
           if (response.ok) {
             const data = await response.json();
+            console.log("Fetched habit data:", data);
             data.sort((a, b) => new Date(a.log_date) - new Date(b.log_date)); // Sort habit data by date
             setHabitData(data);
           } else {
             console.error("Failed to fetch habit data");
           }
         } catch (error) {
-          console.error("Error:", error);
+          console.error("Error fetching habit data:", error);
         }
       };
 
@@ -53,6 +57,7 @@ function LogsPage() {
   }, [habit, habitId]);
 
   const handleNewLog = (newLog) => {
+    console.log("Adding new log:", newLog);
     setLogs((prevLogs) => {
       const updatedLogs = [...prevLogs, newLog];
       updatedLogs.sort((a, b) => new Date(a.log_date) - new Date(b.log_date)); // Sort logs by date
@@ -61,6 +66,7 @@ function LogsPage() {
   };
 
   const handleNewData = (newData) => {
+    console.log("Adding new data:", newData);
     setHabitData((prevData) => {
       const updatedData = [...prevData, newData];
       updatedData.sort((a, b) => new Date(a.log_date) - new Date(b.log_date)); // Sort habit data by date

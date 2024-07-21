@@ -87,7 +87,7 @@ class Habit(db.Model, SerializerMixin):
             'category_id': self.category_id,
             'metric_type': self.metric_type,
             'logs': [log.to_dict_simple() for log in self.logs],
-            'data': [data.to_dict_simple() for data in self.data]
+            'data': [data.to_dict() for data in self.data]
         }
 
     def to_dict_simple(self):

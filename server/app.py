@@ -306,11 +306,36 @@ class HabitDataResource(Resource):
         db.session.delete(data)
         db.session.commit()
         return {'message': '204: No Content'}, 204
+    
+# class HabitLogsForDayResource(Resource):
+#     def get(self, log_date):
+#         user_id = session.get('user_id')
+#         if not user_id:
+#             return {'message': '401: Not Authorized'}, 401
 
+#         logs = HabitLog.query.join(Habit).filter(Habit.user_id == user_id, HabitLog.log_date == log_date).all()
+#         return [log.to_dict() for log in logs], 200
 
+# class HabitDataForDayResource(Resource):
+#     def get(self, log_date):
+#         user_id = session.get('user_id')
+#         if not user_id:
+#             return {'message': '401: Not Authorized'}, 401
 
+#         habit_data_with_logs = db.session.query(HabitData, HabitLog).join(HabitLog, HabitData.log_id == HabitLog.id).join(Habit).filter(Habit.user_id == user_id, HabitLog.log_date == log_date).all()
+#         result = [
+#             {
+#                 'id': data.id,
+#                 'log_id': data.log_id,
+#                 'habit_id': data.habit_id,
+#                 'metric_value': data.metric_value,
+#                 'metric_text': data.metric_text,
+#                 'log_date': log.log_date.isoformat() if log.log_date else None
+#             }
+#             for data, log in habit_data_with_logs
+#         ]
 
-
+#         return result, 200
 
 api.add_resource(CheckSession, '/check_session')
 api.add_resource(Logout, "/logout")
@@ -320,6 +345,10 @@ api.add_resource(CategoryResource, '/categories', '/categories/<int:category_id>
 api.add_resource(HabitResource, '/habits', '/habits/<int:habit_id>')
 api.add_resource(HabitLogResource, '/habits/<int:habit_id>/logs', '/logs/<int:log_id>')
 api.add_resource(HabitDataResource, '/habits/<int:habit_id>/data', '/data/<int:data_id>')
+# api.add_resource(HabitLogsForDayResource, '/logs/<string:log_date>')
+# api.add_resource(HabitDataForDayResource, '/data/<string:log_date>')
+
+
 
 if __name__ == '__main__':
     app.run(port=5555, debug=True)

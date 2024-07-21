@@ -1,10 +1,10 @@
-import React, { useContext, useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import { useParams, Link } from "react-router-dom";
 import { MyContext } from "../MyContext";
 import "../styles/Habits.css";
 
 function CategoryPage() {
-  const { categories, habits, setHabits } = useContext(MyContext);
+  const { categories, habits, setHabits, fetchHabits } = useContext(MyContext);
   const { categoryId } = useParams();
 
   const category = categories.find((cat) => cat.id.toString() === categoryId);
@@ -12,6 +12,10 @@ function CategoryPage() {
   const [newHabit, setNewHabit] = useState("");
   const [habitType, setHabitType] = useState("boolean");
   const [editingHabit, setEditingHabit] = useState(null);
+
+  useEffect(() => {
+    fetchHabits();
+  }, []);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -155,7 +159,12 @@ function CategoryPage() {
                   .map((habit) => (
                     <tr key={habit.id} className="habit-item">
                       <td>
-                        <Link to={`/dashboard/logs/${habit.id}`} className="habit-link">{habit.name}</Link>
+                        <Link
+                          to={`/dashboard/logs/${habit.id}`}
+                          className="habit-link"
+                        >
+                          {habit.name}
+                        </Link>
                       </td>
                       <td>{habit.metric_type}</td>
                       <td>
