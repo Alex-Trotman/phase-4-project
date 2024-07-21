@@ -14,6 +14,7 @@ import { MdEdit } from "react-icons/md";
 function SideBar() {
   const { user, categories, fetchCategories } = useContext(MyContext);
   const [delayedCategories, setDelayedCategories] = useState([]);
+  const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
     const fetchAndSetCategories = async () => {
@@ -21,10 +22,19 @@ function SideBar() {
         await fetchCategories();
       }
       setDelayedCategories(categories);
+      setIsLoading(false);
     };
 
     fetchAndSetCategories();
   }, [categories.length, fetchCategories]);
+
+  useEffect(() => {
+    const timer = setTimeout(() => {
+      setIsLoading(false);
+    }, 3000); // 3 seconds
+
+    return () => clearTimeout(timer);
+  }, []);
 
   return (
     <aside className="sidebar">
@@ -100,8 +110,10 @@ function SideBar() {
           </Link>
         </div>
         <ul className="sidebar-nav">
-          {delayedCategories.length === 0 ? (
+          {isLoading ? (
             <li className="sidebar-item">Loading...</li>
+          ) : delayedCategories.length === 0 ? (
+            <li className="sidebar-item">No categories</li>
           ) : (
             delayedCategories.map((category) => (
               <li key={category.id} className="sidebar-item">

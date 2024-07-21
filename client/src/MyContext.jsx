@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useCallback } from "react";
 
 const MyContext = React.createContext();
 
@@ -7,7 +7,7 @@ const MyProvider = (props) => {
   const [categories, setCategories] = useState([]);
   const [habits, setHabits] = useState([]);
 
-  const fetchCategories = async () => {
+  const fetchCategories = useCallback(async () => {
     try {
       const response = await fetch("/categories", {
         // credentials: "include",
@@ -22,9 +22,9 @@ const MyProvider = (props) => {
     } catch (error) {
       console.error("Error fetching categories", error);
     }
-  };
+  }, []);
 
-  const fetchHabits = async () => {
+  const fetchHabits = useCallback(async () => {
     try {
       const response = await fetch("/habits", {
         // credentials: "include",
@@ -39,7 +39,7 @@ const MyProvider = (props) => {
     } catch (error) {
       console.error("Error fetching habits", error);
     }
-  };
+  }, []);
 
   useEffect(() => {
     // Check session on mount
@@ -63,7 +63,7 @@ const MyProvider = (props) => {
       .catch((error) => {
         console.error("Error checking session status", error);
       });
-  }, []);
+  }, [fetchCategories, fetchHabits]);
 
   return (
     <MyContext.Provider
@@ -75,6 +75,7 @@ const MyProvider = (props) => {
         habits,
         setHabits,
         fetchCategories,
+        fetchHabits,
       }}
     >
       {props.children}
