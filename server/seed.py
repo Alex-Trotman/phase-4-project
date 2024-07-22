@@ -51,7 +51,7 @@ if __name__ == '__main__':
         # Create habits for each category
         habits = []
         for category in categories:
-            for _ in range(2):
+            for _ in range(5):
                 habit = Habit(
                     name=fake.word(),
                     user_id=category.user_id,
