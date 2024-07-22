@@ -34,7 +34,7 @@ function LogsPage() {
   }, [habitId]);
 
   useEffect(() => {
-    if (habit && habit.metric_type === "metric") {
+    if (habit && habit.metric_type === "numeric") {
       console.log("Fetching habit data for habit ID:", habitId);
       const fetchHabitData = async () => {
         try {

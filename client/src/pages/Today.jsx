@@ -24,7 +24,7 @@ const Today = () => {
         );
         initialStatuses[habit.id] = logForToday ? logForToday.status : false;
 
-        if (habit.metric_type === "metric" && logForToday) {
+        if (habit.metric_type === "numeric" && logForToday) {
           const dataForLog = habit.data.find(
             (data) => data.log_id === logForToday.id
           );
@@ -39,6 +39,9 @@ const Today = () => {
       setLoading(false);
     }
   }, [habits, today]);
+
+  console.log("habitStatuses", habitStatuses);
+  console.log("habitValues", habitValues);
 
   const renderTable = () => {
     return categories.map((category) => (
@@ -84,7 +87,7 @@ const Today = () => {
 
   return (
     <div className="today-container">
-      <h2>Today's Habits</h2>
+      {/* <h2>Today's Habits</h2> */}
       {renderTable()}
     </div>
   );
