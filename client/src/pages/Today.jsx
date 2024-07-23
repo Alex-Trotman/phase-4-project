@@ -8,6 +8,7 @@ const Today = () => {
   const [habitStatuses, setHabitStatuses] = useState({});
   const [habitValues, setHabitValues] = useState({});
   const [loading, setLoading] = useState(true);
+  const [noData, setNoData] = useState(false);
 
   useEffect(() => {
     fetchHabits();
@@ -37,8 +38,20 @@ const Today = () => {
       setHabitStatuses(initialStatuses);
       setHabitValues(initialValues);
       setLoading(false);
+    } else {
+      setLoading(false);
     }
   }, [habits, today]);
+
+  useEffect(() => {
+    const timer = setTimeout(() => {
+      if (loading) {
+        setNoData(true);
+      }
+    }, 2000); // 2 seconds delay
+
+    return () => clearTimeout(timer);
+  }, [loading]);
 
   console.log("habitStatuses", habitStatuses);
   console.log("habitValues", habitValues);
@@ -81,14 +94,21 @@ const Today = () => {
     ));
   };
 
-  if (loading) {
+  if (loading && !noData) {
     return <div>Loading...</div>;
+  }
+
+  if (noData) {
+    if (categories.length === 0) {
+      return <div>No categories or habits. Please create them.</div>;
+    } else if (habits.length === 0) {
+      return <div>No habits found. Please add habits.</div>;
+    }
   }
 
   return (
     <div className="today-container">
-      {/* <h2>Today's Habits</h2> */}
-      {renderTable()}
+      {categories.length > 0 ? renderTable() : <div>No categories found. Please create categories.</div>}
     </div>
   );
 };

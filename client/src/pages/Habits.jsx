@@ -1,14 +1,13 @@
-import React, { useContext, useState, useEffect } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import { MyContext } from "../MyContext";
 import "../styles/Habits.css";
+import { useFormik } from "formik";
+import * as yup from "yup";
 
 function Habits() {
   const { user, categories, habits, setHabits } = useContext(MyContext);
-  const [newHabit, setNewHabit] = useState("");
-  const [habitType, setHabitType] = useState("boolean");
-  const [categoryId, setCategoryId] = useState("");
-  const [editingHabit, setEditingHabit] =useState(null);
+  const [editingHabit, setEditingHabit] = useState(null);
 
   useEffect(() => {
     const fetchHabits = async () => {
@@ -28,70 +27,85 @@ function Habits() {
     fetchHabits();
   }, []);
 
-  const handleSubmit = async (e) => {
-    e.preventDefault();
-    if (!categoryId) {
-      alert("Please select a category");
-      return;
-    }
-    const habitData = {
-      name: newHabit,
-      type: habitType,
-      category_id: categoryId,
-    };
-    if (editingHabit) {
-      // Update habit
-      try {
-        const response = await fetch(`/habits/${editingHabit.id}`, {
-          method: "PUT",
-          headers: {
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify(habitData),
-        });
+  const validationSchema = yup.object().shape({
+    newHabit: yup.string().required("Habit name is required"),
+    habitType: yup.string().required("Habit type is required"),
+    categoryId: yup.string().required("Category is required"),
+  });
 
-        if (response.ok) {
-          const updatedHabit = await response.json();
-          setHabits((prevHabits) =>
-            prevHabits.map((habit) =>
-              habit.id === updatedHabit.id ? updatedHabit : habit
-            )
-          );
-          setNewHabit("");
-          setHabitType("boolean");
-          setCategoryId("");
-          setEditingHabit(null);
-        } else {
-          console.error("Failed to update habit");
-        }
-      } catch (error) {
-        console.error("Error:", error);
+  const formik = useFormik({
+    initialValues: {
+      newHabit: "",
+      habitType: "boolean",
+      categoryId: "",
+    },
+    validationSchema: validationSchema,
+    onSubmit: async (values, { setSubmitting, resetForm }) => {
+      if (!values.categoryId) {
+        alert("Please select a category");
+        return;
       }
-    } else {
-      // Create new habit
-      try {
-        const response = await fetch("/habits", {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify(habitData),
-        });
 
-        if (response.ok) {
-          const newHabitData = await response.json();
-          setHabits((prevHabits) => [...prevHabits, newHabitData]);
-          setNewHabit("");
-          setHabitType("boolean");
-          setCategoryId("");
-        } else {
-          console.error("Failed to create habit");
+      const habitData = {
+        name: values.newHabit,
+        type: values.habitType,
+        category_id: values.categoryId,
+      };
+
+      if (editingHabit) {
+        // Update habit
+        try {
+          const response = await fetch(`/habits/${editingHabit.id}`, {
+            method: "PUT",
+            headers: {
+              "Content-Type": "application/json",
+            },
+            body: JSON.stringify(habitData),
+          });
+
+          if (response.ok) {
+            const updatedHabit = await response.json();
+            setHabits((prevHabits) =>
+              prevHabits.map((habit) =>
+                habit.id === updatedHabit.id ? updatedHabit : habit
+              )
+            );
+            resetForm();
+            setEditingHabit(null);
+          } else {
+            console.error("Failed to update habit");
+          }
+        } catch (error) {
+          console.error("Error:", error);
+        } finally {
+          setSubmitting(false);
         }
-      } catch (error) {
-        console.error("Error:", error);
+      } else {
+        // Create new habit
+        try {
+          const response = await fetch("/habits", {
+            method: "POST",
+            headers: {
+              "Content-Type": "application/json",
+            },
+            body: JSON.stringify(habitData),
+          });
+
+          if (response.ok) {
+            const newHabitData = await response.json();
+            setHabits((prevHabits) => [...prevHabits, newHabitData]);
+            resetForm();
+          } else {
+            console.error("Failed to create habit");
+          }
+        } catch (error) {
+          console.error("Error:", error);
+        } finally {
+          setSubmitting(false);
+        }
       }
-    }
-  };
+    },
+  });
 
   const handleDelete = async (id) => {
     try {
@@ -112,32 +126,49 @@ function Habits() {
   };
 
   const handleEdit = (habit) => {
-    setNewHabit(habit.name);
-    setHabitType(habit.metric_type);
-    setCategoryId(habit.category_id);
+    formik.setFieldValue("newHabit", habit.name);
+    formik.setFieldValue("habitType", habit.metric_type);
+    formik.setFieldValue("categoryId", habit.category_id);
     setEditingHabit(habit);
   };
 
   return (
     <div className="habits-container">
       <h1>Welcome to the habits page, {user ? user.username : "user"}!</h1>
-      <form onSubmit={handleSubmit} className="habit-input">
+      <form onSubmit={formik.handleSubmit} className="habit-input">
         <input
           type="text"
-          value={newHabit}
-          onChange={(e) => setNewHabit(e.target.value)}
+          id="newHabit"
+          name="newHabit"
+          onChange={formik.handleChange}
+          onBlur={formik.handleBlur}
+          value={formik.values.newHabit}
           placeholder="Enter new habit"
         />
+        {formik.touched.newHabit && formik.errors.newHabit ? (
+          <div className="error">{formik.errors.newHabit}</div>
+        ) : null}
+
         <select
-          value={habitType}
-          onChange={(e) => setHabitType(e.target.value)}
+          id="habitType"
+          name="habitType"
+          onChange={formik.handleChange}
+          onBlur={formik.handleBlur}
+          value={formik.values.habitType}
         >
           <option value="boolean">Boolean</option>
           <option value="metric">Metric/Value</option>
         </select>
+        {formik.touched.habitType && formik.errors.habitType ? (
+          <div className="error">{formik.errors.habitType}</div>
+        ) : null}
+
         <select
-          value={categoryId}
-          onChange={(e) => setCategoryId(e.target.value)}
+          id="categoryId"
+          name="categoryId"
+          onChange={formik.handleChange}
+          onBlur={formik.handleBlur}
+          value={formik.values.categoryId}
         >
           <option value="">Select Category</option>
           {categories.map((category) => (
@@ -146,16 +177,18 @@ function Habits() {
             </option>
           ))}
         </select>
-        <button type="submit">
+        {formik.touched.categoryId && formik.errors.categoryId ? (
+          <div className="error">{formik.errors.categoryId}</div>
+        ) : null}
+
+        <button type="submit" disabled={formik.isSubmitting}>
           {editingHabit ? "Update Habit" : "Add Habit"}
         </button>
         {editingHabit && (
           <button
             type="button"
             onClick={() => {
-              setNewHabit("");
-              setHabitType("boolean");
-              setCategoryId("");
+              formik.resetForm();
               setEditingHabit(null);
             }}
             style={{ marginLeft: "10px" }}
@@ -178,7 +211,9 @@ function Habits() {
             {habits.map((habit) => (
               <tr key={habit.id} className="habit-item">
                 <td>
-                  <Link to={`/dashboard/logs/${habit.id}`} className="habit-link">{habit.name}</Link>
+                  <Link to={`/dashboard/logs/${habit.id}`} className="habit-link">
+                    {habit.name}
+                  </Link>
                 </td>
                 <td>{habit.metric_type}</td>
                 <td>

@@ -2,64 +2,77 @@ import React, { useContext, useState } from "react";
 import { Link } from "react-router-dom";
 import { MyContext } from "../MyContext";
 import "../styles/Categories.css";
+import { useFormik } from "formik";
+import * as yup from "yup";
 
 function Categories() {
   const { user, categories, setCategories } = useContext(MyContext);
-  const [categoryName, setCategoryName] = useState("");
   const [editingCategory, setEditingCategory] = useState(null);
 
-  const handleSubmit = async (e) => {
-    e.preventDefault();
+  const validationSchema = yup.object().shape({
+    categoryName: yup.string().required("Category name is required"),
+  });
 
-    if (editingCategory) {
-      // Update category
-      try {
-        const response = await fetch(`/categories/${editingCategory.id}`, {
-          method: "PUT",
-          headers: {
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify({ name: categoryName }),
-        });
+  const formik = useFormik({
+    initialValues: {
+      categoryName: "",
+    },
+    validationSchema: validationSchema,
+    onSubmit: async (values, { setSubmitting, resetForm }) => {
+      if (editingCategory) {
+        // Update category
+        try {
+          const response = await fetch(`/categories/${editingCategory.id}`, {
+            method: "PUT",
+            headers: {
+              "Content-Type": "application/json",
+            },
+            body: JSON.stringify({ name: values.categoryName }),
+          });
 
-        if (response.ok) {
-          const updatedCategory = await response.json();
-          setCategories((prevCategories) =>
-            prevCategories.map((category) =>
-              category.id === updatedCategory.id ? updatedCategory : category
-            )
-          );
-          setCategoryName("");
-          setEditingCategory(null);
-        } else {
-          console.error("Failed to update the category");
+          if (response.ok) {
+            const updatedCategory = await response.json();
+            setCategories((prevCategories) =>
+              prevCategories.map((category) =>
+                category.id === updatedCategory.id ? updatedCategory : category
+              )
+            );
+            resetForm();
+            setEditingCategory(null);
+          } else {
+            console.error("Failed to update the category");
+          }
+        } catch (error) {
+          console.error("Error:", error);
+        } finally {
+          setSubmitting(false);
         }
-      } catch (error) {
-        console.error("Error:", error);
-      }
-    } else {
-      // Create new category
-      try {
-        const response = await fetch("/categories", {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify({ name: categoryName, user_id: user.id }),
-        });
+      } else {
+        // Create new category
+        try {
+          const response = await fetch("/categories", {
+            method: "POST",
+            headers: {
+              "Content-Type": "application/json",
+            },
+            body: JSON.stringify({ name: values.categoryName, user_id: user.id }),
+          });
 
-        if (response.ok) {
-          const newCategory = await response.json();
-          setCategories((prevCategories) => [...prevCategories, newCategory]);
-          setCategoryName(""); // Clear the input field
-        } else {
-          console.error("Failed to create a new category");
+          if (response.ok) {
+            const newCategory = await response.json();
+            setCategories((prevCategories) => [...prevCategories, newCategory]);
+            resetForm();
+          } else {
+            console.error("Failed to create a new category");
+          }
+        } catch (error) {
+          console.error("Error:", error);
+        } finally {
+          setSubmitting(false);
         }
-      } catch (error) {
-        console.error("Error:", error);
       }
-    }
-  };
+    },
+  });
 
   const handleDelete = async (id) => {
     try {
@@ -84,7 +97,7 @@ function Categories() {
   };
 
   const handleEdit = (category) => {
-    setCategoryName(category.name);
+    formik.setFieldValue("categoryName", category.name);
     setEditingCategory(category);
   };
 
@@ -95,21 +108,27 @@ function Categories() {
   return (
     <div className="categories-container">
       <h1>Hello {user.username}</h1>
-      <form onSubmit={handleSubmit} className="category-input">
+      <form onSubmit={formik.handleSubmit} className="category-input">
         <input
           type="text"
-          value={categoryName}
-          onChange={(e) => setCategoryName(e.target.value)}
-          placeholder={
-            editingCategory ? "Edit Category Name" : "New Category Name"
-          }
+          id="categoryName"
+          name="categoryName"
+          onChange={formik.handleChange}
+          onBlur={formik.handleBlur}
+          value={formik.values.categoryName}
+          placeholder={editingCategory ? "Edit Category Name" : "New Category Name"}
         />
-        <button type="submit">{editingCategory ? "Update" : "Submit"}</button>
+        {formik.touched.categoryName && formik.errors.categoryName ? (
+          <div className="error">{formik.errors.categoryName}</div>
+        ) : null}
+        <button type="submit" disabled={formik.isSubmitting}>
+          {editingCategory ? "Update" : "Submit"}
+        </button>
         {editingCategory && (
           <button
             type="button"
             onClick={() => {
-              setCategoryName("");
+              formik.resetForm();
               setEditingCategory(null);
             }}
             style={{ marginLeft: "10px" }}
