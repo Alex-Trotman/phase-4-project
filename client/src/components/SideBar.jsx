@@ -88,19 +88,6 @@ function SideBar() {
       {/* Separation line */}
       <hr className="sidebar-separator" />
 
-      {/* Habits section */}
-      <div className="sidebar-section">
-        <div className="sidebar-section-title">
-          <Link to="/dashboard/habits" className="sidebar-link">
-            <MdEdit className="sidebar-icon" />
-            Habits
-          </Link>
-        </div>
-      </div>
-
-      {/* Separation line */}
-      <hr className="sidebar-separator" />
-
       {/* List user's categories */}
       <div className="sidebar-section">
         <div className="sidebar-section-title">
@@ -127,6 +114,19 @@ function SideBar() {
             ))
           )}
         </ul>
+      </div>
+
+      {/* Separation line */}
+      <hr className="sidebar-separator" />
+
+      {/* Habits section */}
+      <div className="sidebar-section">
+        <div className="sidebar-section-title">
+          <Link to="/dashboard/habits" className="sidebar-link">
+            <MdEdit className="sidebar-icon" />
+            Habits
+          </Link>
+        </div>
       </div>
     </aside>
   );

@@ -1,38 +1,52 @@
-import React, { useState } from "react";
+import React from "react";
+import { useFormik } from "formik";
+import * as yup from "yup";
 
 const MetricLogForm = ({ habitId, habitData, setHabitData, onNewLog }) => {
-  const [newLog, setNewLog] = useState("");
-  const [logDate, setLogDate] = useState("");
+  const validationSchema = yup.object().shape({
+    logDate: yup.string().required("Log date is required"),
+    newLog: yup
+      .number()
+      .typeError("Value must be a number")
+      .required("Value is required")
+      .positive("Value must be positive"),
+  });
 
-  const handleSubmit = async (e) => {
-    e.preventDefault();
+  const formik = useFormik({
+    initialValues: {
+      logDate: "",
+      newLog: "",
+    },
+    validationSchema: validationSchema,
+    onSubmit: async (values, { setSubmitting, resetForm }) => {
+      const logData = {
+        log_date: values.logDate,
+        metric_value: parseFloat(values.newLog),
+      };
 
-    const logData = {
-      log_date: logDate,
-      metric_value: parseFloat(newLog),
-    };
+      try {
+        const response = await fetch(`/habits/${habitId}/data`, {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify(logData),
+        });
 
-    try {
-      const response = await fetch(`/habits/${habitId}/data`, {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify(logData),
-      });
-
-      if (response.ok) {
-        const newLog = await response.json();
-        onNewLog(newLog);
-        setNewLog("");
-        setLogDate("");
-      } else {
-        console.error("Failed to create log");
+        if (response.ok) {
+          const newLog = await response.json();
+          onNewLog(newLog);
+          resetForm();
+        } else {
+          console.error("Failed to create log");
+        }
+      } catch (error) {
+        console.error("Error:", error);
+      } finally {
+        setSubmitting(false);
       }
-    } catch (error) {
-      console.error("Error:", error);
-    }
-  };
+    },
+  });
 
   const sortedHabitData = habitData
     .slice()
@@ -40,26 +54,38 @@ const MetricLogForm = ({ habitId, habitData, setHabitData, onNewLog }) => {
 
   return (
     <>
-      <form onSubmit={handleSubmit} className="log-form">
+      <form onSubmit={formik.handleSubmit} className="log-form">
         <label>
           Log Date:
           <input
             type="date"
-            value={logDate}
-            onChange={(e) => setLogDate(e.target.value)}
+            id="logDate"
+            name="logDate"
+            onChange={formik.handleChange}
+            onBlur={formik.handleBlur}
+            value={formik.values.logDate}
             required
           />
+          {formik.touched.logDate && formik.errors.logDate ? (
+            <div className="error">{formik.errors.logDate}</div>
+          ) : null}
         </label>
         <label>
           Value:
           <input
             type="number"
-            value={newLog}
-            onChange={(e) => setNewLog(e.target.value)}
+            id="newLog"
+            name="newLog"
+            onChange={formik.handleChange}
+            onBlur={formik.handleBlur}
+            value={formik.values.newLog}
             required
           />
+          {formik.touched.newLog && formik.errors.newLog ? (
+            <div className="error">{formik.errors.newLog}</div>
+          ) : null}
         </label>
-        <button type="submit">Add Log</button>
+        <button type="submit" disabled={formik.isSubmitting}>Add Log</button>
       </form>
       <div className="table-container">
         <table className="log-table">
