@@ -23,8 +23,8 @@ if __name__ == '__main__':
         # Create users
         users = []
         for _ in range(1):
-            username = fake.user_name()
-            password = fake.password()
+            username = "demo" # fake.user_name()
+            password = "demo" # fake.password()
             user = User(
                 username=username,
                 password_hash=password  # This will trigger the setter to hash the password
@@ -38,7 +38,7 @@ if __name__ == '__main__':
         # Create categories for each user
         categories = []
         for user in users:
-            for _ in range(3):
+            for _ in range(5):
                 category = Category(
                     name=fake.word(),
                     user_id=user.id
@@ -66,7 +66,7 @@ if __name__ == '__main__':
         # # Create habit logs for each habit
         habit_logs = []
         for habit in habits:
-            for _ in range(3):
+            for _ in range(5):
                 log_date = datetime.now() - timedelta(days=randint(0, 30))
                 habit_log = HabitLog(
                     habit_id=habit.id,
