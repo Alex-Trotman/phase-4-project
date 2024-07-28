@@ -122,7 +122,7 @@ function CategoryPage() {
                 onChange={(e) => setHabitType(e.target.value)}
               >
                 <option value="boolean">Boolean</option>
-                <option value="metric">Metric/Value</option>
+                <option value="numeric">Metric/Value</option>
               </select>
               <button type="submit">
                 {editingHabit ? "Update Habit" : "Add Habit"}

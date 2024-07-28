@@ -19,26 +19,38 @@ const Today = () => {
       const initialStatuses = {};
       const initialValues = {};
 
+      console.log("Habits:", habits);
+      console.log("Today:", today);
+
       habits.forEach((habit) => {
+        console.log(`Processing habit ${habit.id}:`, habit);
+
         const logForToday = habit.logs.find(
           (log) => log.log_date.split("T")[0] === today
         );
+        console.log(`Log for today for habit ${habit.id}:`, logForToday);
+
         initialStatuses[habit.id] = logForToday ? logForToday.status : false;
 
         if (habit.metric_type === "numeric" && logForToday) {
           const dataForLog = habit.data.find(
             (data) => data.log_id === logForToday.id
           );
+          console.log(`Data for log ${logForToday.id}:`, dataForLog);
           initialValues[habit.id] = dataForLog ? dataForLog.metric_value : 0;
         } else {
           initialValues[habit.id] = 0;
         }
       });
 
+      console.log("Initial Statuses:", initialStatuses);
+      console.log("Initial Values:", initialValues);
+
       setHabitStatuses(initialStatuses);
       setHabitValues(initialValues);
       setLoading(false);
     } else {
+      console.log("No habits found");
       setLoading(false);
     }
   }, [habits, today]);
@@ -55,6 +67,7 @@ const Today = () => {
 
   console.log("habitStatuses", habitStatuses);
   console.log("habitValues", habitValues);
+  console.log("habits inside today", habits);
 
   const renderTable = () => {
     return categories.map((category) => (
@@ -108,7 +121,11 @@ const Today = () => {
 
   return (
     <div className="today-container">
-      {categories.length > 0 ? renderTable() : <div>No categories found. Please create categories.</div>}
+      {categories.length > 0 ? (
+        renderTable()
+      ) : (
+        <div>No categories found. Please create categories.</div>
+      )}
     </div>
   );
 };
