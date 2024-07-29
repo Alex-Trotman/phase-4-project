@@ -1,5 +1,6 @@
 import React, { useContext, useEffect, useState } from "react";
 import { MyContext } from "../MyContext";
+import '../styles/Week.css';
 
 const Week = () => {
   const { categories, habits, fetchHabits } = useContext(MyContext);

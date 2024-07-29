@@ -1,0 +1,26 @@
+/* * {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+  }
+  
+html,
+body,
+.main
+#root,
+.week-container {
+  height: 100%;
+  min-height: 100vh;
+}
+
+.week-container {
+    display: grid;
+    grid-template-columns: 300px 1fr;
+    grid-template-rows: 60px 1fr;
+  }
+
+.category-container {
+    border: 1px solid red;
+    height: 600px;
+    margin: 20px;
+} */
