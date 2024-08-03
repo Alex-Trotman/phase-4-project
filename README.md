@@ -15,37 +15,22 @@ Habit Tracker is a comprehensive web application designed to help users manage a
 ## Project Structure
 
 ### Server
-
-- **`app.py`**: The main entry point of the Flask application, initializing the app and defining route endpoints.
-  - **Functions**:
-    - `create_app()`: Initializes the Flask application.
-    - `register_routes(app)`: Registers all routes for the application.
 - **`config.py`**: Configuration file for setting up the Flask app, database URI, and other settings.
   - **Functions**:
-    - `Config`: Contains configuration settings like `SQLALCHEMY_DATABASE_URI` and `SECRET_KEY`.
+    - `Config`: Contains configuration settings like `SQLALCHEMY_DATABASE_URI` and `app.secret_key`.
 - **`models.py`**: Contains SQLAlchemy models for the application.
   - **Models**:
-    - `User`: Represents users with attributes like `id`, `username`, `email`, `password_hash`, and methods `set_password` and `check_password`.
+    - `User`: Represents users with attributes like `id`, `username`, `password_hash`, and method `authenticate`.
     - `Category`: Represents habit categories with attributes `id`, `name`, and `user_id`.
-    - `Habit`: Represents individual habits with attributes `id`, `name`, `category_id`, and `user_id`.
-    - `Log`: Represents daily logs for habits with attributes `id`, `habit_id`, `date`, `status`, and `metrics`.
+    - `Habit`: Represents individual habits with attributes `id`, `name`, `user_id`, `category_id`, and `metric_type`.
+    - `HabitLog`: Represents logs for habits with attributes `id`, `habit_id`, `log_date`, `status`, and `note`.
+    - `HabitData`: Represents logs for habits with attributes `id`, `log_id`, `habit_id`, and `metric_value`.
 - **`seed.py`**: Script to seed the database with initial data.
-
-  - **Functions**:
-    - `seed_data()`: Seeds the database with sample categories and habits.
-
-- **`migrations/`**: Directory containing Alembic migration files for database schema changes.
-  - **Files**:
-    - `README`, `alembic.ini`, `env.py`, `script.py.mako`, `versions/`: Files and directories necessary for managing database migrations.
-- **`instance/`**: Directory containing the SQLite database file `app.db`.
-
 ### Client
 
 - **`client/`**: Directory containing the React frontend application.
 
   - **Files**:
-
-    - `README.md`: Documentation specific to the client application.
     - `package.json`, `package-lock.json`: Configuration files for managing dependencies.
 
   - **`src/`**: Source code for the React application.
@@ -114,16 +99,6 @@ To get started with the Habit Tracker project, follow these steps:
 6. **Access the application:**
    Open your web browser and go to `http://127.0.0.1:5000`.
 
-## Contributing
-
-If you wish to contribute to the Habit Tracker project, please follow these guidelines:
-
-1. Fork the repository.
-2. Create a new branch (`git checkout -b feature-branch`).
-3. Make your changes and commit them (`git commit -am 'Add new feature'`).
-4. Push to the branch (`git push origin feature-branch`).
-5. Create a new Pull Request.
-
 ## Resources
 
 - [Flask Documentation](https://flask.palletsprojects.com/)
@@ -137,10 +112,3 @@ If you wish to contribute to the Habit Tracker project, please follow these guid
 ![Log Habits](client/public/screenshots/log_habits.png)
 ![Reports](client/public/screenshots/reports.png)
 
-## License
-
-This project is licensed under the MIT License. See the [LICENSE](LICENSE.md) file for more details.
-
----
-
-Feel free to customize and expand this README as needed to fit your specific project.
