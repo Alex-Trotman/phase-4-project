@@ -17,7 +17,7 @@ import Logout from "./pages/Logout";
 import Today from "./pages/Today";
 import Week from "./pages/Week";
 import Month from "./pages/Month";
-import "./App.css"; // Import the CSS file
+import "./styles/App.css"; // Import the CSS file
 
 export default function App() {
   return (
