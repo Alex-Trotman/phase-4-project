@@ -49,14 +49,11 @@ Habit Tracker is a comprehensive web application designed to help users manage a
   - **`public/`**: Public assets for the React application.
     - **Files**:
       - `index.html`: Main HTML file for the React application.
-      - `favicon.ico`, `logo192.png`, `logo512.png`, `manifest.json`, `robots.txt`: Static assets and configuration files.
 
 ### Configuration Files
 
 - **`Pipfile`**: Specifies Python packages and dependencies for the server.
 - **`Pipfile.lock`**: Lock file for the specified Python packages.
-- **`CONTRIBUTING.md`**: Guidelines for contributing to the project.
-- **`LICENSE.md`**: License information for the project.
 
 ## Getting Started
 
@@ -104,11 +101,3 @@ To get started with the Habit Tracker project, follow these steps:
 - [Flask Documentation](https://flask.palletsprojects.com/)
 - [SQLAlchemy Documentation](https://docs.sqlalchemy.org/)
 - [React Documentation](https://reactjs.org/)
-
-## Screenshots
-
-![Home Page](client/public/screenshots/home_page.png)
-![Habit List](client/public/screenshots/habit_list.png)
-![Log Habits](client/public/screenshots/log_habits.png)
-![Reports](client/public/screenshots/reports.png)
-
