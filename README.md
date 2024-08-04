@@ -69,32 +69,43 @@ To get started with the Habit Tracker project, follow these steps:
 2. **Set up a virtual environment:**
 
    ```bash
-   python -m venv venv
-   source venv/bin/activate  # On Windows use `venv\Scripts\activate`
+   cd server
+   pipenv install
+   pipenv shell
    ```
-
-3. **Install dependencies:**
-
-   ```bash
-   pip install -r requirements.txt
-   ```
-
+   
 4. **Set up the database:**
 
    ```bash
+   cd server
    flask db init
    flask db migrate -m "Initial migration."
    flask db upgrade
+   python seed.py
    ```
 
-5. **Run the application:**
+5. **Install dependencies:**
+   In a different terminal, run:
+   ```bash
+   cd client
+   npm install
+   npm start
+   ```
+
+6. **Run the application:**
 
    ```bash
+   export FLASK_RUN_PORT=5555
    flask run
    ```
+   or run
+   
+   ```bash
+   python app.py
+   ```
 
-6. **Access the application:**
-   Open your web browser and go to `http://127.0.0.1:5000`.
+8. **Access the application:**
+   Open your web browser and go to `http://localhost:3000/`.
 
 ## Resources
 
