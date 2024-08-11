@@ -20,7 +20,10 @@
     "yup": "^1.4.0"
   },
   "devDependencies": {
-    "@babel/plugin-proposal-private-property-in-object": "^7.21.11"
+    "@babel/plugin-proposal-private-property-in-object": "^7.21.11",
+    "autoprefixer": "^10.4.20",
+    "postcss": "^8.4.41",
+    "tailwindcss": "^3.4.9"
   },
   "scripts": {
     "start": "react-scripts start",
