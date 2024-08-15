@@ -37,15 +37,15 @@ function SideBar() {
   }, []);
 
   return (
-    <aside className="sidebar">
+    <aside className="sidebar ">
       {/* User profile section */}
-      <div className="sidebar-profile">
+      <div className="sidebar-profile bg-blue-700 flex">
         <img
           src="https://via.placeholder.com/40"
           alt="User profile"
-          className="sidebar-profile-image"
+          className="sidebar-profile-image w-10 h-10 rounded-full"
         />
-        <span className="sidebar-profile-username">
+        <span className="sidebar-profile-username w-5 h-5">
           {user ? user.username : "user"}
         </span>
       </div>
