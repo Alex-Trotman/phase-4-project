@@ -39,13 +39,13 @@ function SideBar() {
   return (
     <aside className="sidebar flex flex-col">
       {/* User profile section */}
-      <div className="sidebar-profile bg-blue-700 px-8 flex py-3 items-center">
+      <div className="sidebar-profile bg-lime-700 px-8 flex py-3 items-center">
         <img
           src="https://via.placeholder.com/40"
           alt="User profile"
           className="sidebar-profile-image w-10 h-10 rounded-full mr-3"
         />
-        <span className="sidebar-profile-username text-lg">
+        <span className="sidebar-profile-username text-lg text-white">
           {user ? user.username : "user"}
         </span>
       </div>
@@ -53,7 +53,7 @@ function SideBar() {
       <div className="p-6">
         {" "}
         {/* Add your desired padding here */}
-        <div className="sidebar-section-title my-2 text-base uppercase font-bold hover:bg-gray-300">
+        <div className="sidebar-section-title my-2 text-base uppercase font-bold hover:bg-gray-300 p-2 rounded-md">
           <Link
             to="/dashboard"
             className="sidebar-link flex items-center text-inherit no-underline"
@@ -63,13 +63,13 @@ function SideBar() {
           </Link>
         </div>
         {/* Filter through different views of habits (Today, Week, Month etc...) */}
-        <div className="sidebar-section mt-5">
+        <div className="sidebar-section mt-5 p-2">
           <div className="sidebar-section-title flex items-center text-inherit no-underline my-2 text-base uppercase font-bold ">
             <FaChess className="sidebar-icon" />
             Views
           </div>
           <ul className="sidebar-nav">
-            <li className="sidebar-item my-3 hover:bg-gray-300">
+            <li className="sidebar-item my-3 hover:bg-gray-300 p-2 rounded-md">
               <Link
                 to="/dashboard/today"
                 className="sidebar-link flex items-center text-inherit no-underline"
@@ -78,7 +78,7 @@ function SideBar() {
                 Today
               </Link>
             </li>
-            <li className="sidebar-item my-3 hover:bg-gray-300">
+            <li className="sidebar-item my-3 hover:bg-gray-300 p-2 rounded-md">
               <Link
                 to="/dashboard/week"
                 className="sidebar-link flex items-center text-inherit no-underline"
@@ -87,7 +87,7 @@ function SideBar() {
                 This Week
               </Link>
             </li>
-            <li className="sidebar-item my-3 hover:bg-gray-300">
+            <li className="sidebar-item my-3 hover:bg-gray-300 p-2 rounded-md">
               <Link
                 to="/dashboard/month"
                 className="sidebar-link flex items-center text-inherit no-underline"
@@ -102,7 +102,7 @@ function SideBar() {
         <hr className="sidebar-separator" />
         {/* List user's categories */}
         <div className="sidebar-section">
-          <div className="sidebar-section-title my-2 text-base uppercase font-bold hover:bg-gray-300">
+          <div className="sidebar-section-title my-2 text-base uppercase font-bold hover:bg-gray-300 p-2 rounded-md">
             <Link
               to="/dashboard/categories"
               className="sidebar-link flex items-center text-inherit no-underline"
@@ -120,7 +120,7 @@ function SideBar() {
               delayedCategories.map((category) => (
                 <li
                   key={category.id}
-                  className="sidebar-item my-3 hover:bg-gray-300"
+                  className="sidebar-item my-3 hover:bg-gray-300 p-2 rounded-md"
                 >
                   <Link
                     to={`/dashboard/category/${category.id}`}
@@ -136,8 +136,8 @@ function SideBar() {
         {/* Separation line */}
         <hr className="sidebar-separator" />
         {/* Habits section */}
-        <div className="sidebar-section hover:bg-gray-300">
-          <div className="sidebar-section-title my-2 text-base uppercase font-bold">
+        <div className="sidebar-section hover:bg-gray-300 rounded-md">
+          <div className="sidebar-section-title my-2 text-base uppercase font-bold p-2 ">
             <Link
               to="/dashboard/habits"
               className="sidebar-link flex items-center text-inherit no-underline"
