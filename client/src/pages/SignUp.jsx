@@ -6,7 +6,7 @@ import { useFormik } from "formik";
 import * as yup from "yup";
 
 function Signup() {
-  const { user, setUser } = useContext(MyContext);
+  const { user, setUser, fetchCategories, fetchHabits } = useContext(MyContext);
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -46,6 +46,10 @@ function Signup() {
         .then((data) => {
           console.log("Sign up successful", data);
           setUser(data);
+          // Set categories, and habits to null
+          fetchCategories()
+          fetchHabits()
+          // 
           navigate("/dashboard");
         })
         .catch((error) => {
