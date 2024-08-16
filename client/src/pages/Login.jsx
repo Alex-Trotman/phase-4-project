@@ -112,9 +112,9 @@ function Login() {
     // </div>
 
     <div>
-      <nav className="bg-transparent p-4">
-        <div className="flex justify-between items-center">
-          <div className="text-gray-800 text-2xl font-light italic">
+      <nav className="bg-transparent p-4 px-8">
+        <div className="flex justify-between items-center ">
+          <div className="text-gray-800 text-3xl">
             <Link to="/">Habit Tracker</Link>
           </div>
         </div>
