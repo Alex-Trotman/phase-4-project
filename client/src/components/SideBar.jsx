@@ -120,11 +120,11 @@ function SideBar() {
               delayedCategories.map((category) => (
                 <li
                   key={category.id}
-                  className="sidebar-item my-3 hover:bg-gray-300 p-2 rounded-md"
+                  className="sidebar-item my-3 hover:bg-gray-300 p-2 rounded-md "
                 >
                   <Link
                     to={`/dashboard/category/${category.id}`}
-                    className="sidebar-link"
+                    className="sidebar-link block w-full h-full"
                   >
                     {category.name}
                   </Link>
