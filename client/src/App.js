@@ -58,8 +58,8 @@ function HomeLayout() {
 function DashboardLayout() {
   return (
     <div className="dashboard-container">
-      <DashboardHeader className="header" />
-      <SideBar className="sidebar" />
+      <SideBar />
+      <DashboardHeader />
       <div className="main">
         <Outlet />
       </div>

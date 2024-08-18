@@ -37,7 +37,7 @@ function SideBar() {
   }, []);
 
   return (
-    <aside className="sidebar flex flex-col">
+    <aside className="sidebar flex flex-col w-auto">
       {/* User profile section */}
       <div className="sidebar-profile bg-lime-700 px-8 flex py-3 items-center">
         <img
@@ -50,7 +50,7 @@ function SideBar() {
         </span>
       </div>
       {/* New div wrapping the rest of the sidebar content */}
-      <div className="p-6">
+      <div className="p-6 bg-white h-full">
         {" "}
         {/* Add your desired padding here */}
         <div className="sidebar-section-title my-2 text-base uppercase font-bold hover:bg-gray-300 p-2 rounded-md">
