@@ -7,6 +7,7 @@ import About from "./pages/About";
 import Dashboard from "./pages/Dashboard";
 import NavBar from "./components/NavBar"; // Import the NavBar component
 import SideBar from "./components/SideBar";
+import SideBar2 from "./components/SideBar2";
 import DashboardHeader from "./components/DashboardHeader";
 import Categories from "./pages/Categories";
 import CategoryPage from "./pages/CategoryPage";
@@ -59,6 +60,7 @@ function DashboardLayout() {
   return (
     <div className="dashboard-container">
       <SideBar />
+      {/* <SideBar2 /> */}
       <DashboardHeader />
       <div className="main">
         <Outlet />

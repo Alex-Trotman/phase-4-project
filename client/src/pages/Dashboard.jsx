@@ -24,12 +24,24 @@ function Dashboard() {
 
   return (
     <>
-      <div className="card"></div>
-      <div className="card"></div>
-      <div className="card"></div>
-      <div className="card"></div>
-      <div className="card"></div>
-      <div className="card"></div>
+      <div className="card flex items-center justify-center text-4xl hover:bg-stone-400">
+        1
+      </div>
+      <div className="card flex items-center justify-center text-4xl hover:bg-stone-400">
+        2
+      </div>
+      <div className="card flex items-center justify-center text-4xl hover:bg-stone-400">
+        3
+      </div>
+      <div className="card flex items-center justify-center text-4xl hover:bg-stone-400">
+        4
+      </div>
+      <div className="card flex items-center justify-center text-4xl hover:bg-stone-400">
+        5
+      </div>
+      <div className="card flex items-center justify-center text-4xl hover:bg-stone-400">
+        6
+      </div>
       {/* <Link to="/logout">Logout</Link> */}
     </>
   );
