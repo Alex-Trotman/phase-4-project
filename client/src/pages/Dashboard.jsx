@@ -25,16 +25,16 @@ function Dashboard() {
   return (
     <>
       <div className="card flex items-center justify-center text-4xl hover:bg-stone-400">
-        1
+         X Total habits
       </div>
       <div className="card flex items-center justify-center text-4xl hover:bg-stone-400">
-        2
+        X Perfect days
       </div>
       <div className="card flex items-center justify-center text-4xl hover:bg-stone-400">
-        3
+        X.XX Average Per Daily
       </div>
       <div className="card flex items-center justify-center text-4xl hover:bg-stone-400">
-        4
+        X Total Streaks
       </div>
       <div className="card flex items-center justify-center text-4xl hover:bg-stone-400">
         5
