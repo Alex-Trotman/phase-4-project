@@ -30,7 +30,7 @@ export default function App() {
         </Route>
         <Route path="login" element={<Login />} />
         <Route path="signup" element={<SignUp />} />
-        <Route path="dashboard" element={<DashboardLayout />}>
+        <Route path="app" element={<DashboardLayout />}>
           <Route index element={<Dashboard />} />
           <Route path="categories" element={<Categories />} />
           <Route path="habits" element={<Habits />} />
@@ -59,8 +59,8 @@ function HomeLayout() {
 function DashboardLayout() {
   return (
     <div className="dashboard-container">
-      <SideBar />
-      {/* <SideBar2 /> */}
+      {/* <SideBar /> */}
+      <SideBar2 />
       <DashboardHeader />
       <div className="main">
         <Outlet />

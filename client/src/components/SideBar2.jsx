@@ -49,7 +49,7 @@ function SideBar2() {
           {user ? user.username : "user"}
         </span>
       </div>
-      <div>
+      <div className="p-6 bg-white h-full">
         {/* Create new habit 
         
         1. Habit name
@@ -63,6 +63,26 @@ function SideBar2() {
         {/* Manage/view habits */}
         {/* Manage/view categories */}
         {/* Customize dashboard */}
+
+        <div className="sidebar-section-title my-2 text-base uppercase font-bold hover:bg-gray-300 p-2 rounded-md">
+          <Link
+            to="/app"
+            className="sidebar-link flex items-center text-inherit no-underline"
+          >
+            {/* <FaChessBoard className="sidebar-icon" /> */}
+            Dashboard
+          </Link>
+        </div>
+        <div className="sidebar-section-title my-2 text-base uppercase font-bold hover:bg-gray-300 p-2 rounded-md">
+          <Link
+            to="/statistics"
+            className="sidebar-link flex items-center text-inherit no-underline"
+          >
+            {/* <FaChessBoard className="sidebar-icon" /> */}
+            Statistics
+          </Link>
+        </div>
+        
       </div>
     </aside>
   );
