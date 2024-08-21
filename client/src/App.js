@@ -60,13 +60,11 @@ function HomeLayout() {
 
 function DashboardLayout() {
   return (
-    <div className="dashboard-container">
+    <div className="app-container">
       {/* <SideBar /> */}
       <SideBar2 />
       <DashboardHeader />
-      <div className="main">
-        <Outlet />
-      </div>
+      <Outlet />
     </div>
   );
 }

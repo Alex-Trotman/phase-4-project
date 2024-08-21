@@ -306,6 +306,33 @@ class HabitDataResource(Resource):
         db.session.delete(data)
         db.session.commit()
         return {'message': '204: No Content'}, 204
+
+class AveragePerDaily(Resource):
+    def get(self):
+        # Assuming you pass the user_id as a query parameter in the request
+        user_id = session.get('user_id')
+        
+        # Get all habits associated with the user
+        habits = Habit.query.filter_by(user_id=user_id).all()
+
+        # Get all habit logs associated with those habits
+        habit_ids = [habit.id for habit in habits]
+        habit_logs = HabitLog.query.filter(HabitLog.habit_id.in_(habit_ids)).all()
+        
+        # Calculate total completions and unique days
+        total_completions = len(habit_logs)
+        unique_days = db.session.query(db.func.date(HabitLog.log_date)).filter(HabitLog.habit_id.in_(habit_ids)).distinct().count()
+        
+        # Calculate the average habits completed per day
+        if unique_days > 0:
+            average_per_daily = total_completions / unique_days
+        else:
+            average_per_daily = 0
+
+        return {'average_per_daily': round(average_per_daily, 2)}
+
+# Add the resource to the API
+api.add_resource(AveragePerDaily, '/api/habits/average-per-daily')
     
 # class HabitLogsForDayResource(Resource):
 #     def get(self, log_date):

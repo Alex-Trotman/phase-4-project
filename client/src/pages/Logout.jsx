@@ -3,7 +3,7 @@ import { useNavigate } from "react-router-dom";
 import { MyContext } from "../MyContext";
 
 function Logout() {
-  const { setUser } = useContext(MyContext);
+  const { setUser, setHabits, setCategories } = useContext(MyContext);
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -13,6 +13,8 @@ function Logout() {
       .then((response) => {
         if (response.ok) {
           setUser(null);
+          setHabits([])
+          setCategories([])
           navigate("/");
         } else {
           console.error("Logout failed");

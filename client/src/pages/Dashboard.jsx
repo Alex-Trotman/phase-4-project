@@ -1,11 +1,21 @@
-import React, { useEffect, useContext } from "react";
+import React, { useEffect, useContext, useState } from "react";
 import { useNavigate } from "react-router-dom"; // Link,
 import { MyContext } from "../MyContext";
 import "../styles/Dashboard.css";
 
 function Dashboard() {
-  const { user } = useContext(MyContext);
+  const { user, habits } = useContext(MyContext);
+  const [averagePerDaily, setAveragePerDaily] = useState(0);
   const navigate = useNavigate();
+
+  useEffect(() => {
+    fetch('/api/habits/average-per-daily')
+        .then(response => response.json())
+        .then(data => {
+          setAveragePerDaily(data.average_per_daily)
+          console.log("HERE", data.average_per_daily)
+        });
+  }, []);
 
   useEffect(() => {
     if (!user) {
@@ -22,16 +32,18 @@ function Dashboard() {
     return <h1>Loading...</h1>;
   }
 
+  console.log(habits)
+
   return (
-    <>
+    <div className="dashboard-main">
       <div className="card flex items-center justify-center text-4xl hover:bg-stone-400">
-         X Total habits
+         {habits.length} Total habits
       </div>
       <div className="card flex items-center justify-center text-4xl hover:bg-stone-400">
         X Perfect days
       </div>
       <div className="card flex items-center justify-center text-4xl hover:bg-stone-400">
-        X.XX Average Per Daily
+        {averagePerDaily} Average Per Daily
       </div>
       <div className="card flex items-center justify-center text-4xl hover:bg-stone-400">
         X Total Streaks
@@ -43,7 +55,7 @@ function Dashboard() {
         6
       </div>
       {/* <Link to="/logout">Logout</Link> */}
-    </>
+    </div>
   );
 }
 
