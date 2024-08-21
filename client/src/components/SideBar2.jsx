@@ -75,14 +75,31 @@ function SideBar2() {
         </div>
         <div className="sidebar-section-title my-2 text-base uppercase font-bold hover:bg-gray-300 p-2 rounded-md">
           <Link
-            to="/statistics"
+            to="/app/statistics"
             className="sidebar-link flex items-center text-inherit no-underline"
           >
             {/* <FaChessBoard className="sidebar-icon" /> */}
             Statistics
           </Link>
         </div>
-        
+        <div className="sidebar-section-title my-2 text-base uppercase font-bold hover:bg-gray-300 p-2 rounded-md">
+          <Link
+            to="/app/categories"
+            className="sidebar-link flex items-center text-inherit no-underline"
+          >
+            {/* <FaChessBoard className="sidebar-icon" /> */}
+            Categories
+          </Link>
+        </div>
+        <div className="sidebar-section-title my-2 text-base uppercase font-bold hover:bg-gray-300 p-2 rounded-md">
+          <Link
+            to="/app/habits"
+            className="sidebar-link flex items-center text-inherit no-underline"
+          >
+            {/* <FaChessBoard className="sidebar-icon" /> */}
+            Habits
+          </Link>
+        </div>
       </div>
     </aside>
   );

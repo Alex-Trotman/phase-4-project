@@ -18,6 +18,7 @@ import Logout from "./pages/Logout";
 import Today from "./pages/Today";
 import Week from "./pages/Week";
 import Month from "./pages/Month";
+import Statistics from "./pages/Statistics";
 import "./styles/App.css"; // Import the CSS file
 
 export default function App() {
@@ -33,6 +34,7 @@ export default function App() {
         <Route path="app" element={<DashboardLayout />}>
           <Route index element={<Dashboard />} />
           <Route path="categories" element={<Categories />} />
+          <Route path="statistics" element={<Statistics />} />
           <Route path="habits" element={<Habits />} />
           <Route path="today" element={<Today />} />
           <Route path="week" element={<Week />} />

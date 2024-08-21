@@ -211,7 +211,7 @@ function Habits() {
             {habits.map((habit) => (
               <tr key={habit.id} className="habit-item">
                 <td>
-                  <Link to={`/dashboard/logs/${habit.id}`} className="habit-link">
+                  <Link to={`/app/logs/${habit.id}`} className="habit-link">
                     {habit.name}
                   </Link>
                 </td>

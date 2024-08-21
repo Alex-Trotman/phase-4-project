@@ -55,7 +55,10 @@ function Categories() {
             headers: {
               "Content-Type": "application/json",
             },
-            body: JSON.stringify({ name: values.categoryName, user_id: user.id }),
+            body: JSON.stringify({
+              name: values.categoryName,
+              user_id: user.id,
+            }),
           });
 
           if (response.ok) {
@@ -116,7 +119,9 @@ function Categories() {
           onChange={formik.handleChange}
           onBlur={formik.handleBlur}
           value={formik.values.categoryName}
-          placeholder={editingCategory ? "Edit Category Name" : "New Category Name"}
+          placeholder={
+            editingCategory ? "Edit Category Name" : "New Category Name"
+          }
         />
         {formik.touched.categoryName && formik.errors.categoryName ? (
           <div className="error">{formik.errors.categoryName}</div>
@@ -149,7 +154,10 @@ function Categories() {
             {categories.map((category) => (
               <tr key={category.id} className="category-item">
                 <td>
-                  <Link to={`/dashboard/category/${category.id}`} className="category-link">
+                  <Link
+                    to={`/app/category/${category.id}`}
+                    className="category-link"
+                  >
                     {category.name}
                   </Link>
                 </td>

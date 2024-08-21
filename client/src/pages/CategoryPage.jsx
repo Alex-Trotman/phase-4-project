@@ -187,7 +187,7 @@ function CategoryPage() {
                     <tr key={habit.id} className="habit-item">
                       <td>
                         <Link
-                          to={`/dashboard/logs/${habit.id}`}
+                          to={`/app/logs/${habit.id}`}
                           className="habit-link"
                         >
                           {habit.name}

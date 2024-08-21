@@ -12,7 +12,7 @@ function Signup() {
   useEffect(() => {
     if (user) {
       console.log("Line 15 signup.js, user is set");
-      navigate("/dashboard");
+      navigate("/app");
     }
   }, [user, navigate]);
 
@@ -47,10 +47,10 @@ function Signup() {
           console.log("Sign up successful", data);
           setUser(data);
           // Set categories, and habits to null
-          fetchCategories()
-          fetchHabits()
-          // 
-          navigate("/dashboard");
+          fetchCategories();
+          fetchHabits();
+          //
+          navigate("/app");
         })
         .catch((error) => {
           console.error("There was an error signing up!", error);

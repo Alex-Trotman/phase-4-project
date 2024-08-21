@@ -12,7 +12,7 @@ function Login() {
   useEffect(() => {
     if (user) {
       console.log("Line 15 login.js, user is set");
-      navigate("/dashboard");
+      navigate("/app");
     }
   }, [user, navigate]);
 
@@ -48,7 +48,7 @@ function Login() {
           console.log("Login successful", data);
           console.log("User data from login:", data); // Log data.user
           setUser(data); // Set the user state
-          navigate("/dashboard");
+          navigate("/app");
         })
         .catch((error) => {
           console.error("There was an error logging in!", error);
