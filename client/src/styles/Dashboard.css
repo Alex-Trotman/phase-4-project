@@ -83,7 +83,7 @@ body,
 }
 
 @media (max-width: 925px) {
-  .main {
+  .dashboard-main {
     grid-template-columns: 1fr;
     grid-template-rows: repeat(6, 200px);
     grid-template-areas: initial;

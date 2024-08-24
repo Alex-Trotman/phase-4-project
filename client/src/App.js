@@ -1,6 +1,6 @@
 import React, { useContext } from "react";
 import { MyContext } from "./MyContext";
-import { Routes, Route, Outlet, useParams  } from "react-router-dom";
+import { Routes, Route, Outlet } from "react-router-dom";
 import Home from "./pages/Home";
 import SignUp from "./pages/SignUp";
 import Login from "./pages/Login";
@@ -21,6 +21,7 @@ import Week from "./pages/Week";
 import Month from "./pages/Month";
 import Statistics from "./pages/Statistics";
 import "./styles/App.css"; // Import the CSS file
+import StatisticsCategoryPage from "./pages/StatisticsCategoryPage";
 
 export default function App() {
   const { categories } = useContext(MyContext);
@@ -39,9 +40,7 @@ export default function App() {
           <Route path="categories" element={<Categories />} />
           <Route path="statistics" element={<StatisticsLayout />}>
             <Route index element={<Statistics />} />
-            {categories.map((category) => {
-              return <Route path={`statistics/:${category.id}`} element={<Hello />} />
-            })}
+            <Route path=":categoryName" element={<StatisticsCategoryPage />} />
           </Route>
           <Route path="habits" element={<Habits />} />
           <Route path="today" element={<Today />} />
@@ -54,11 +53,6 @@ export default function App() {
       </Routes>
     </div>
   );
-}
-
-function Hello(){
-  const { categoryId } = useParams();
-  return <h1>{categoryId}</h1>;
 }
 
 function HomeLayout() {
@@ -82,10 +76,10 @@ function DashboardLayout() {
   );
 }
 
-function StatisticsLayout(){
+function StatisticsLayout() {
   return (
-    <div className="">
+    <div className="statistics-layout-container">
       <Outlet />
     </div>
-  )
+  );
 }
