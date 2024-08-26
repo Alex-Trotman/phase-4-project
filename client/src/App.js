@@ -22,6 +22,7 @@ import Month from "./pages/Month";
 import Statistics from "./pages/Statistics";
 import "./styles/App.css"; // Import the CSS file
 import StatisticsCategoryPage from "./pages/StatisticsCategoryPage";
+import StatisticsHabitPage from "./pages/StatisticsHabitPage";
 
 export default function App() {
   const { categories } = useContext(MyContext);
@@ -41,6 +42,10 @@ export default function App() {
           <Route path="statistics" element={<StatisticsLayout />}>
             <Route index element={<Statistics />} />
             <Route path=":categoryName" element={<StatisticsCategoryPage />} />
+            <Route
+              path=":categoryName/:habitName"
+              element={<StatisticsHabitPage />}
+            />
           </Route>
           <Route path="habits" element={<Habits />} />
           <Route path="today" element={<Today />} />

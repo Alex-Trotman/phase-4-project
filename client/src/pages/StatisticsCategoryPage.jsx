@@ -19,12 +19,13 @@ function StatisticsCategoryPage() {
       <div className="h-20 w-full flex items-center">
         {category &&
           category.habits.map((habit) => (
-            <div
+            <Link
+              to={`${habit.name.split(" ").join("_")}`}
               key={habit.id}
               className="m-3 hover:bg-gray-300 p-2 rounded-md"
             >
               {habit.name}
-            </div>
+            </Link>
           ))}
       </div>
     </div>
