@@ -133,9 +133,11 @@ function Habits() {
   };
 
   return (
-    <div className="habits-container">
-      <h1>Welcome to the habits page, {user ? user.username : "user"}!</h1>
-      <form onSubmit={formik.handleSubmit} className="habit-input">
+    <div className="habits-container bg-gray-100 p-6 rounded-lg shadow-lg flex flex-col items-center">
+      <form
+        onSubmit={formik.handleSubmit}
+        className="habit-input space-y-4 w-full max-w-md"
+      >
         <input
           type="text"
           id="newHabit"
@@ -144,9 +146,12 @@ function Habits() {
           onBlur={formik.handleBlur}
           value={formik.values.newHabit}
           placeholder="Enter new habit"
+          className="block w-full p-2 border border-gray-300 rounded-md"
         />
         {formik.touched.newHabit && formik.errors.newHabit ? (
-          <div className="error">{formik.errors.newHabit}</div>
+          <div className="error text-red-500 text-sm">
+            {formik.errors.newHabit}
+          </div>
         ) : null}
 
         <select
@@ -155,12 +160,15 @@ function Habits() {
           onChange={formik.handleChange}
           onBlur={formik.handleBlur}
           value={formik.values.habitType}
+          className="block w-full p-2 border border-gray-300 rounded-md"
         >
           <option value="boolean">Boolean</option>
           <option value="metric">Metric/Value</option>
         </select>
         {formik.touched.habitType && formik.errors.habitType ? (
-          <div className="error">{formik.errors.habitType}</div>
+          <div className="error text-red-500 text-sm">
+            {formik.errors.habitType}
+          </div>
         ) : null}
 
         <select
@@ -169,6 +177,7 @@ function Habits() {
           onChange={formik.handleChange}
           onBlur={formik.handleBlur}
           value={formik.values.categoryId}
+          className="block w-full p-2 border border-gray-300 rounded-md"
         >
           <option value="">Select Category</option>
           {categories.map((category) => (
@@ -178,52 +187,68 @@ function Habits() {
           ))}
         </select>
         {formik.touched.categoryId && formik.errors.categoryId ? (
-          <div className="error">{formik.errors.categoryId}</div>
+          <div className="error text-red-500 text-sm">
+            {formik.errors.categoryId}
+          </div>
         ) : null}
 
-        <button type="submit" disabled={formik.isSubmitting}>
-          {editingHabit ? "Update Habit" : "Add Habit"}
-        </button>
-        {editingHabit && (
+        <div className="flex items-center space-x-4">
           <button
-            type="button"
-            onClick={() => {
-              formik.resetForm();
-              setEditingHabit(null);
-            }}
-            style={{ marginLeft: "10px" }}
+            type="submit"
+            disabled={formik.isSubmitting}
+            className="bg-blue-500 text-white px-4 py-2 rounded-md hover:bg-blue-600"
           >
-            Cancel
+            {editingHabit ? "Update Habit" : "Add Habit"}
           </button>
-        )}
+          {editingHabit && (
+            <button
+              type="button"
+              onClick={() => {
+                formik.resetForm();
+                setEditingHabit(null);
+              }}
+              className="ml-2 bg-gray-500 text-white px-4 py-2 rounded-md hover:bg-gray-600"
+            >
+              Cancel
+            </button>
+          )}
+        </div>
       </form>
-      <div className="table-container">
-        <table className="habit-table">
-          <thead>
+      <div className="table-container mt-6 w-full max-w-4xl">
+        <table className="habit-table w-full bg-white border border-gray-300 rounded-lg shadow-md">
+          <thead className="bg-gray-200 text-gray-700">
             <tr>
-              <th>Habit Name</th>
-              <th>Type</th>
-              <th>Category</th>
-              <th>Actions</th>
+              <th className="p-2">Habit Name</th>
+              <th className="p-2">Type</th>
+              <th className="p-2">Category</th>
+              <th className="p-2">Actions</th>
             </tr>
           </thead>
           <tbody>
             {habits.map((habit) => (
-              <tr key={habit.id} className="habit-item">
-                <td>
-                  <Link to={`/app/logs/${habit.id}`} className="habit-link">
+              <tr key={habit.id} className="habit-item text-gray-700">
+                <td className="p-2">
+                  <Link
+                    to={`/app/logs/${habit.id}`}
+                    className="habit-link text-blue-500 hover:underline"
+                  >
                     {habit.name}
                   </Link>
                 </td>
-                <td>{habit.metric_type}</td>
-                <td>
+                <td className="p-2">{habit.metric_type}</td>
+                <td className="p-2">
                   {categories.find((cat) => cat.id === habit.category_id)?.name}
                 </td>
-                <td>
-                  <button onClick={() => handleEdit(habit)}>Edit</button>
+                <td className="p-2 flex space-x-4">
+                  <button
+                    onClick={() => handleEdit(habit)}
+                    className="text-blue-500 hover:underline"
+                  >
+                    Edit
+                  </button>
                   <button
                     onClick={() => handleDelete(habit.id)}
-                    style={{ marginLeft: "10px" }}
+                    className="text-red-500 hover:underline"
                   >
                     Delete
                   </button>

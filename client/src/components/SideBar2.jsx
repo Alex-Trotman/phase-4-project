@@ -2,14 +2,9 @@ import React, { useContext, useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import "../styles/SideBar.css";
 import { MyContext } from "../MyContext";
-import {
-  FaChessBoard,
-  FaChess,
-  FaChessPawn,
-  FaChessKnight,
-  FaChessBishop,
-} from "react-icons/fa";
-import { MdEdit } from "react-icons/md";
+import { MdDashboard, MdCategory } from "react-icons/md";
+import { IoIosStats } from "react-icons/io";
+import { FaListCheck } from "react-icons/fa6";
 
 function SideBar2() {
   const { user, categories, fetchCategories } = useContext(MyContext);
@@ -69,7 +64,7 @@ function SideBar2() {
             to="/app"
             className="sidebar-link flex items-center text-inherit no-underline"
           >
-            {/* <FaChessBoard className="sidebar-icon" /> */}
+            <MdDashboard className="sidebar-icon h-7 w-7 mr-3" />
             Dashboard
           </Link>
         </div>
@@ -78,7 +73,7 @@ function SideBar2() {
             to="/app/statistics"
             className="sidebar-link flex items-center text-inherit no-underline"
           >
-            {/* <FaChessBoard className="sidebar-icon" /> */}
+            <IoIosStats className="sidebar-icon h-7 w-7 mr-3" />
             Statistics
           </Link>
         </div>
@@ -87,7 +82,7 @@ function SideBar2() {
             to="/app/categories"
             className="sidebar-link flex items-center text-inherit no-underline"
           >
-            {/* <FaChessBoard className="sidebar-icon" /> */}
+            <MdCategory className="sidebar-icon h-7 w-7 mr-3" />
             Categories
           </Link>
         </div>
@@ -96,7 +91,7 @@ function SideBar2() {
             to="/app/habits"
             className="sidebar-link flex items-center text-inherit no-underline"
           >
-            {/* <FaChessBoard className="sidebar-icon" /> */}
+            <FaListCheck className="sidebar-icon h-7 w-7 mr-3" />
             Habits
           </Link>
         </div>

@@ -109,9 +109,11 @@ function Categories() {
   }
 
   return (
-    <div className="categories-container">
-      <h1>Hello {user.username}</h1>
-      <form onSubmit={formik.handleSubmit} className="category-input">
+    <div className="categories-container bg-gray-100 p-6 rounded-lg shadow-lg flex flex-col items-center">
+      <form
+        onSubmit={formik.handleSubmit}
+        className="category-input space-y-4 w-full max-w-md"
+      >
         <input
           type="text"
           id="categoryName"
@@ -122,50 +124,64 @@ function Categories() {
           placeholder={
             editingCategory ? "Edit Category Name" : "New Category Name"
           }
+          className="block w-full p-2 border border-gray-300 rounded-md"
         />
         {formik.touched.categoryName && formik.errors.categoryName ? (
-          <div className="error">{formik.errors.categoryName}</div>
+          <div className="error text-red-500 text-sm">
+            {formik.errors.categoryName}
+          </div>
         ) : null}
-        <button type="submit" disabled={formik.isSubmitting}>
-          {editingCategory ? "Update" : "Submit"}
-        </button>
-        {editingCategory && (
+        <div className="flex items-center space-x-4">
           <button
-            type="button"
-            onClick={() => {
-              formik.resetForm();
-              setEditingCategory(null);
-            }}
-            style={{ marginLeft: "10px" }}
+            type="submit"
+            disabled={formik.isSubmitting}
+            className="bg-blue-500 text-white px-4 py-2 rounded-md hover:bg-blue-600"
           >
-            Cancel
+            {editingCategory ? "Update" : "Submit"}
           </button>
-        )}
+          {editingCategory && (
+            <button
+              type="button"
+              onClick={() => {
+                formik.resetForm();
+                setEditingCategory(null);
+              }}
+              className="ml-2 bg-gray-500 text-white px-4 py-2 rounded-md hover:bg-gray-600"
+            >
+              Cancel
+            </button>
+          )}
+        </div>
       </form>
-      <div className="table-container">
-        <table className="category-table">
-          <thead>
+      <div className="table-container mt-6 w-full max-w-4xl">
+        <table className="category-table w-full bg-white border border-gray-300 rounded-lg shadow-md">
+          <thead className="bg-gray-200 text-gray-700">
             <tr>
-              <th>Category Name</th>
-              <th>Actions</th>
+              <th className="p-2">Category Name</th>
+              <th className="p-2">Actions</th>
             </tr>
           </thead>
           <tbody>
             {categories.map((category) => (
-              <tr key={category.id} className="category-item">
-                <td>
+              <tr key={category.id} className="category-item text-gray-700">
+                <td className="p-2">
                   <Link
                     to={`/app/category/${category.id}`}
-                    className="category-link"
+                    className="category-link text-blue-500 hover:underline"
                   >
                     {category.name}
                   </Link>
                 </td>
-                <td>
-                  <button onClick={() => handleEdit(category)}>Edit</button>
+                <td className="p-2 flex space-x-4">
+                  <button
+                    onClick={() => handleEdit(category)}
+                    className="text-blue-500 hover:underline"
+                  >
+                    Edit
+                  </button>
                   <button
                     onClick={() => handleDelete(category.id)}
-                    style={{ marginLeft: "10px" }}
+                    className="text-red-500 hover:underline"
                   >
                     Delete
                   </button>
