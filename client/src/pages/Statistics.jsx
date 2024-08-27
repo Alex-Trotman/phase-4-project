@@ -10,8 +10,8 @@ function Statistics() {
   }, []);
 
   return (
-    <div className="statistics-main w-full flex">
-      <div className="categories-cards h-auto w-full flex justify-evenly shadow-lg ">
+    <div className="statistics-main h-full w-full flex bg-white">
+      <div className="categories-cards h-16 w-full flex justify-evenly shadow-lg ">
         {categories.map((category) => (
           <div
             key={category.id}

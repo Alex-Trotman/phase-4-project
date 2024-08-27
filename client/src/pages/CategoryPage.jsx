@@ -119,7 +119,7 @@ function CategoryPage() {
   };
 
   return (
-    <div className="bg-gray-100 p-6 rounded-lg shadow-lg flex flex-col items-center">
+    <div className="bg-gray-100 p-6 shadow-lg flex flex-col items-center">
       {category ? (
         <>
           <h1 className="text-2xl font-bold mb-4 text-center">

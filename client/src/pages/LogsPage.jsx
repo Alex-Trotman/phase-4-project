@@ -75,7 +75,7 @@ function LogsPage() {
   };
 
   return (
-    <div>
+    <div className="h-full bg-white">
       {habit ? (
         <>
           <h1>Habit: {habit.name}</h1>

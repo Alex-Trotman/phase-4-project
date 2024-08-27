@@ -109,7 +109,7 @@ function Categories() {
   }
 
   return (
-    <div className="categories-container bg-gray-100 p-6 rounded-lg shadow-lg flex flex-col items-center">
+    <div className="categories-container bg-gray-100 p-6 shadow-lg flex flex-col items-center">
       <form
         onSubmit={formik.handleSubmit}
         className="category-input space-y-4 w-full max-w-md"
