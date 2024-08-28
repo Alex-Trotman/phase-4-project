@@ -24,17 +24,21 @@ import "./styles/App.css"; // Import the CSS file
 import StatisticsCategoryPage from "./pages/StatisticsCategoryPage";
 import StatisticsHabitPage from "./pages/StatisticsHabitPage";
 import MUIPLAYGROUND from "./MUIPLAYGROUND.jsx";
+import Box from "@mui/material/Box";
 
 export default function App() {
   const { categories } = useContext(MyContext);
 
   return (
     <div>
-      <Routes>
-        <Route path="/" element={<MUIPLAYGROUND />} />
-      </Routes>
+      {/* <Box sx={{ display: "flex" }}>
+        <Routes>
+          <Route path="/" element={<MUIPLAYGROUND />} />
+        </Routes>
+      </Box> */}
+      
 
-      {/* <Routes>
+      <Routes>
         <Route path="/" element={<HomeLayout />}>
           <Route index element={<Home />} />
           <Route path="about" element={<About />} />
@@ -60,7 +64,7 @@ export default function App() {
           <Route path="logs/:habitId" element={<LogsPage />} />
         </Route>
         <Route path="logout" element={<Logout />} />
-      </Routes> */}
+      </Routes>
     </div>
   );
 }
