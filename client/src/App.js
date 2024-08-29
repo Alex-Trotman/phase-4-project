@@ -1,4 +1,4 @@
-import React, { useContext } from "react";
+import React, { useContext, useState } from "react";
 import { MyContext } from "./MyContext";
 import { Routes, Route, Outlet } from "react-router-dom";
 import Home from "./pages/Home";
@@ -90,11 +90,16 @@ function HomeLayout() {
 }
 
 function DashboardLayout() {
+  const [expanded, setExpanded] = useState(true);
   return (
-    <div className="app-container grid grid-cols-1 xl:grid-cols-[250px_1fr] bg-black min-h-screen">
+    <div className={`app-container grid xl:grid-cols-[auto_1fr] min-h-screen`}>
       {/* Sidebar */}
-      <div className="side-bar hidden xl:block bg-red-600 h-screen">
-        <SideBar2>
+      <div
+        className={`side-bar hidden xl:block bg-red-600 h-screen transition-all duration-300 ${
+          expanded ? "w-64" : "w-20"
+        }`}
+      >
+        <SideBar2 expanded={expanded} setExpanded={setExpanded}>
           <SideBarItem
             icon={<LayoutDashboard size={20} />}
             text="Dashboard"

@@ -9,11 +9,11 @@ import { IoMdMore } from "react-icons/io";
 import { ChevronFirst, ChevronLast } from "lucide-react";
 const SideBarContext = createContext();
 
-export default function SideBar2({ children }) {
+export default function SideBar2({ children, expanded, setExpanded }) {
   const { user, categories, fetchCategories } = useContext(MyContext);
   const [delayedCategories, setDelayedCategories] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
-  const [expanded, setExpanded] = useState(true);
+  // const [expanded, setExpanded] = useState(true);
 
   useEffect(() => {
     const fetchAndSetCategories = async () => {
