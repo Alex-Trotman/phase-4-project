@@ -9,12 +9,12 @@ function Dashboard() {
   const navigate = useNavigate();
 
   useEffect(() => {
-    fetch('/api/habits/average-per-daily')
-        .then(response => response.json())
-        .then(data => {
-          setAveragePerDaily(data.average_per_daily)
-          console.log("HERE", data.average_per_daily)
-        });
+    fetch("/api/habits/average-per-daily")
+      .then((response) => response.json())
+      .then((data) => {
+        setAveragePerDaily(data.average_per_daily);
+        console.log("HERE", data.average_per_daily);
+      });
   }, []);
 
   useEffect(() => {
@@ -32,26 +32,26 @@ function Dashboard() {
     return <h1>Loading...</h1>;
   }
 
-  console.log(habits)
+  console.log(habits);
 
   return (
-    <div className="dashboard-main">
-      <div className="card flex items-center justify-center text-4xl hover:bg-stone-400">
-         {habits.length} Total habits
+    <div className="dashboard-main grid grid-cols-1 grid-rows-3 md:grid-cols-3 bg-slate-200 h-full">
+      <div className="card flex items-center justify-center bg-slate-400 m-4 rounded-lg hover:bg-stone-400">
+        {habits.length} Total habits
       </div>
-      <div className="card flex items-center justify-center text-4xl hover:bg-stone-400">
+      <div className="card flex items-center justify-center bg-slate-400 m-4 rounded-lg hover:bg-stone-400">
         X Perfect days
       </div>
-      <div className="card flex items-center justify-center text-4xl hover:bg-stone-400">
+      <div className="card flex items-center justify-center bg-slate-400 m-4 rounded-lg hover:bg-stone-400">
         {averagePerDaily} Average Per Daily
       </div>
-      <div className="card flex items-center justify-center text-4xl hover:bg-stone-400">
+      <div className="card flex items-center justify-center sm:row-span-2 sm:col-span-2 bg-slate-400 m-4 rounded-lg hover:bg-stone-400">
         X Total Streaks
       </div>
-      <div className="card flex items-center justify-center text-4xl hover:bg-stone-400">
+      <div className="card flex items-center justify-center bg-slate-400 m-4 rounded-lg hover:bg-stone-400">
         5
       </div>
-      <div className="card flex items-center justify-center text-4xl hover:bg-stone-400">
+      <div className="card flex items-center justify-center bg-slate-400 m-4 rounded-lg hover:bg-stone-400">
         6
       </div>
       {/* <Link to="/logout">Logout</Link> */}

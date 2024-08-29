@@ -36,7 +36,6 @@ export default function App() {
           <Route path="/" element={<MUIPLAYGROUND />} />
         </Routes>
       </Box> */}
-      
 
       <Routes>
         <Route path="/" element={<HomeLayout />}>
@@ -81,11 +80,17 @@ function HomeLayout() {
 
 function DashboardLayout() {
   return (
-    <div className="app-container">
-      {/* <SideBar /> */}
-      <SideBar2 />
-      <DashboardHeader />
-      <Outlet />
+    <div className="app-container grid grid-cols-1 xl:grid-cols-[250px_1fr] bg-black min-h-screen">
+      {/* Sidebar */}
+      <div className="side-bar hidden xl:block bg-red-600 h-screen">
+        <SideBar2 />
+      </div>
+
+      {/* Header and Outlet */}
+      <div className="header-outlet-container flex flex-col">
+        <DashboardHeader />
+        <Outlet />
+      </div>
     </div>
   );
 }

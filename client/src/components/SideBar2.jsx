@@ -32,9 +32,9 @@ function SideBar2() {
   }, []);
 
   return (
-    <aside className="sidebar flex flex-col w-auto">
+    <aside className="sidebar flex flex-col w-64 h-screen">
       {/* User profile section */}
-      <div className="sidebar-profile bg-lime-700 px-8 flex py-3 items-center">
+      <div className="sidebar-profile bg-lime-700 px-8 flex py-3 items-center min-h-[64px]">
         <img
           src="https://via.placeholder.com/40"
           alt="User profile"
