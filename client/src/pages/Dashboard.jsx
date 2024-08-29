@@ -35,24 +35,24 @@ function Dashboard() {
   console.log(habits);
 
   return (
-    <div className="dashboard-main grid grid-cols-1 grid-rows-3 md:grid-cols-3 bg-slate-200 h-full">
-      <div className="card flex items-center justify-center bg-slate-400 m-4 rounded-lg hover:bg-stone-400">
+    <div className="dashboard-main grid grid-cols-1 grid-rows-2 sm:grid-cols-2 md:grid-cols-3 bg-slate-200 h-full">
+      <div className="card flex items-center justify-center bg-slate-400 m-4 rounded-lg hover:bg-stone-400 min-h-96">
         {habits.length} Total habits
       </div>
-      <div className="card flex items-center justify-center bg-slate-400 m-4 rounded-lg hover:bg-stone-400">
+      <div className="card flex items-center justify-center bg-slate-400 m-4 rounded-lg hover:bg-stone-400 min-h-96">
         X Perfect days
       </div>
-      <div className="card flex items-center justify-center bg-slate-400 m-4 rounded-lg hover:bg-stone-400">
+      <div className="card flex items-center justify-center bg-slate-400 m-4 rounded-lg hover:bg-stone-400 min-h-96">
         {averagePerDaily} Average Per Daily
       </div>
-      <div className="card flex items-center justify-center sm:row-span-2 sm:col-span-2 bg-slate-400 m-4 rounded-lg hover:bg-stone-400">
+      <div className="card flex items-center justify-center sm:row-span-1 sm:col-span-1 col-span-1 row-span-1 bg-slate-400 m-4 rounded-lg hover:bg-stone-400 min-h-96">
         X Total Streaks
       </div>
-      <div className="card flex items-center justify-center bg-slate-400 m-4 rounded-lg hover:bg-stone-400">
-        5
+      <div className="card flex items-center justify-center bg-slate-400 m-4 rounded-lg hover:bg-stone-400 min-h-96">
+        Lorem ipsum dolor sit amet consectetur
       </div>
-      <div className="card flex items-center justify-center bg-slate-400 m-4 rounded-lg hover:bg-stone-400">
-        6
+      <div className="card flex items-center justify-center bg-slate-400 m-4 rounded-lg hover:bg-stone-400 min-h-96">
+        Lorem ipsum dolor sit amet consectetur
       </div>
       {/* <Link to="/logout">Logout</Link> */}
     </div>
