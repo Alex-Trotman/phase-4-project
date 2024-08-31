@@ -1,6 +1,6 @@
 import React, { useContext, useState } from "react";
 import { MyContext } from "./MyContext";
-import { Routes, Route, Outlet } from "react-router-dom";
+import { Routes, Route, Outlet, useLocation } from "react-router-dom";
 import Home from "./pages/Home";
 import SignUp from "./pages/SignUp";
 import Login from "./pages/Login";
@@ -27,11 +27,11 @@ import MUIPLAYGROUND from "./MUIPLAYGROUND.jsx";
 import Box from "@mui/material/Box";
 
 import {
-  LifeBuoy,
+  MessageCircleQuestion,
   Receipt,
   Boxes,
   Package,
-  UserCircle,
+  ListChecks,
   BarChart3,
   LayoutDashboard,
   Settings,
@@ -90,43 +90,59 @@ function HomeLayout() {
 }
 
 function DashboardLayout() {
-  const [expanded, setExpanded] = useState(true);
+  const [expanded, setExpanded] = useState(false);
+  const location = useLocation();
   return (
-    <div className={`app-container grid xl:grid-cols-[auto_1fr] min-h-screen`}>
+    <div className="app-container flex h-screen">
       {/* Sidebar */}
-      <div
-        className={`side-bar hidden xl:block bg-red-600 h-screen transition-all duration-300 ${
-          expanded ? "w-64" : "w-20"
+      <aside
+        className={`bg-white transition-all duration-300 transform ${
+          expanded
+            ? "translate-x-0 w-64 fixed top-0 left-0 h-full z-50 xl:relative xl:w-64"
+            : "-translate-x-full w-64 fixed top-0 left-0 h-full z-50 xl:translate-x-0 xl:relative xl:w-20"
         }`}
       >
         <SideBar2 expanded={expanded} setExpanded={setExpanded}>
           <SideBarItem
             icon={<LayoutDashboard size={20} />}
             text="Dashboard"
-            alert
+            path="/app"
+            active={location.pathname === "/app"} // Dynamically set active prop
           />
-
           <SideBarItem
             icon={<BarChart3 size={20} />}
             text="Statistics"
-            active
+            path="/app/statistics"
+            active={location.pathname.startsWith("/app/statistics")} // Dynamically set active prop
           />
-          <SideBarItem icon={<UserCircle size={20} />} text="Users" />
-          <SideBarItem icon={<Boxes size={20} />} text="Inventory" />
-          <SideBarItem icon={<Package size={20} />} text="Orders" alert />
-          <SideBarItem icon={<Receipt size={20} />} text="Billings" />
-
+          <SideBarItem
+            icon={<Boxes size={20} />}
+            text="Categories"
+            path="/app/categories"
+            active={location.pathname === "/app/categories"} // Dynamically set active prop
+          />
+          <SideBarItem
+            icon={<ListChecks size={20} />}
+            text="Habits"
+            path="/app/habits"
+            active={location.pathname === "/app/habits"} // Dynamically set active prop
+          />
           <hr className="my-3" />
-
-          <SideBarItem icon={<Settings size={20} />} text="Settings" />
-          <SideBarItem icon={<LifeBuoy size={20} />} text="Help" />
+          <SideBarItem
+            icon={<Settings size={20} />}
+            text="Settings"
+            path=""
+            active={location.pathname === "/app/settings"} // Dynamically set active prop
+          />
         </SideBar2>
-      </div>
+      </aside>
 
-      {/* Header and Outlet */}
-      <div className="header-outlet-container flex flex-col">
-        <DashboardHeader />
-        <Outlet />
+      {/* Main Content */}
+      <div className="flex-1 flex flex-col overflow-hidden">
+        <DashboardHeader setExpanded={setExpanded} expanded={expanded} />
+        <div className="flex-1 overflow-y-auto">
+          <Outlet />
+        </div>
       </div>
     </div>
   );
