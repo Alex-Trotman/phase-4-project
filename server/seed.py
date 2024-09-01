@@ -23,8 +23,8 @@ if __name__ == '__main__':
         # Create users
         users = []
         for _ in range(1):
-            username = "demo" # fake.user_name()
-            password = "demo" # fake.password()
+            username = "demo"  # Set to a specific username
+            password = "demo"  # Set to a specific password
             user = User(
                 username=username,
                 password_hash=password  # This will trigger the setter to hash the password
@@ -56,21 +56,26 @@ if __name__ == '__main__':
                     name=fake.word(),
                     user_id=category.user_id,
                     category_id=category.id,
-                    metric_type=rc(['boolean', 'numeric']) # , 'text'
+                    metric_type=rc(['boolean', 'numeric'])  # Randomly assign metric type
                 )
                 db.session.add(habit)
                 habits.append(habit)
 
         db.session.commit()
 
-        # # Create habit logs for each habit
+        # Create habit logs for each habit, spanning the entire year
         habit_logs = []
         for habit in habits:
-            for _ in range(5):
-                log_date = datetime.now() - timedelta(days=randint(0, 30))
+            start_date = datetime(datetime.now().year, 1, 1)
+            end_date = datetime(datetime.now().year, 12, 31)
+            days_between = (end_date - start_date).days
+
+            # Create logs for approximately 80% of the days in the year
+            for _ in range(int(days_between * 0.5)):
+                random_day = start_date + timedelta(days=randint(0, days_between))
                 habit_log = HabitLog(
                     habit_id=habit.id,
-                    log_date=log_date,
+                    log_date=random_day,
                     status=rc([True, False]) if habit.metric_type == 'boolean' else None,
                     note=fake.sentence() if rc([True, False]) else None
                 )
@@ -79,7 +84,7 @@ if __name__ == '__main__':
 
         db.session.commit()
 
-        # # Create habit data for each habit log
+        # Create habit data for each habit log
         for habit_log in habit_logs:
             if habit_log.habit.metric_type == 'numeric':
                 habit_data = HabitData(

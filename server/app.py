@@ -333,6 +333,35 @@ class AveragePerDaily(Resource):
 
 # Add the resource to the API
 api.add_resource(AveragePerDaily, '/api/habits/average-per-daily')
+
+class HabitLogsForYearResource(Resource):
+    def get(self, habit_id, year=None):
+        user_id = session.get('user_id')
+        if not user_id:
+            return {'message': '401: Not Authorized'}, 401
+
+        habit = Habit.query.filter_by(id=habit_id, user_id=user_id).first()
+        if not habit:
+            return {'message': '404: Not Found'}, 404
+        
+        # Default to the current year if none is provided
+        if year is None:
+            year = datetime.now().year
+        
+        start_date = datetime(int(year), 1, 1)
+        end_date = datetime(int(year), 12, 31)
+
+        logs = HabitLog.query.filter(
+            HabitLog.habit_id == habit_id,
+            HabitLog.log_date >= start_date,
+            HabitLog.log_date <= end_date
+        ).all()
+        
+        return [log.to_dict() for log in logs], 200
+
+# Add this new resource to the API
+api.add_resource(HabitLogsForYearResource, '/habits/<int:habit_id>/logs/year/<int:year>')
+
     
 # class HabitLogsForDayResource(Resource):
 #     def get(self, log_date):

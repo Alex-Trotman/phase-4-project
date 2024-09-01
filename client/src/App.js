@@ -150,7 +150,7 @@ function DashboardLayout() {
 
 function StatisticsLayout() {
   return (
-    <div className="statistics-layout-container">
+    <div className="statistics-layout-container w-full h-full">
       <Outlet />
     </div>
   );
