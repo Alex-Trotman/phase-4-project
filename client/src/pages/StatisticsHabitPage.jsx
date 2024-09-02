@@ -16,12 +16,13 @@ function StatisticsCategoryPage() {
   const habit = habits.find((habit) => habit.name === formattedHabitName);
 
   useEffect(() => {
-    console.log("INSIDE", habit);
+    if (!habit) return; // Don't proceed if habit is not defined
+
     const fetchHabitLogs = async () => {
       try {
         setLoading(true);
-        const habitId = habit.id; // Replace with the actual habit ID
-        const year = new Date().getFullYear(); // Get the current year
+        const habitId = habit.id;
+        const year = new Date().getFullYear();
         const response = await fetch(`/habits/${habitId}/logs/year/${year}`);
 
         if (!response.ok) {
@@ -31,7 +32,7 @@ function StatisticsCategoryPage() {
         const data = await response.json();
         const formattedData = data.map((log) => ({
           date: log.log_date,
-          count: 1, // Since you mentioned it's a boolean habit, using count: 1 for each log
+          count: 1,
         }));
         setLogs(formattedData);
       } catch (err) {
@@ -41,8 +42,8 @@ function StatisticsCategoryPage() {
       }
     };
 
-    fetchHabitLogs(habit);
-  }, []);
+    fetchHabitLogs();
+  }, [habit]);
 
   if (loading) return <div>Loading...</div>;
   if (error) return <div>Error: {error}</div>;
@@ -57,7 +58,7 @@ function StatisticsCategoryPage() {
           <CalendarHeatmap
             startDate={new Date("2024-01-01")}
             endDate={new Date("2024-12-31")}
-            values={logs} // Use the fetched logs here
+            values={logs}
           />
         </div>
       </div>

@@ -4,11 +4,12 @@ import { MyContext } from "../MyContext";
 import "../styles/Dashboard.css";
 
 function Dashboard() {
-  const { user, habits } = useContext(MyContext);
+  const { user, habits, fetchHabits } = useContext(MyContext);
   const [averagePerDaily, setAveragePerDaily] = useState(0);
   const navigate = useNavigate();
 
   useEffect(() => {
+    fetchHabits();
     fetch("/api/habits/average-per-daily")
       .then((response) => response.json())
       .then((data) => {
