@@ -73,7 +73,9 @@ export default function SideBar2({ children, expanded, setExpanded }) {
             }`}
           >
             <div className="leading-4">
-              <h4 className="font-semibold">John Doe</h4>
+              <h4 className="font-semibold">
+                {user ? user.username : "Loading"}
+              </h4>
               <span className="text-xs text-gray-600">johndoe@gmail.com</span>
             </div>
             <IoMdMore size={20} />

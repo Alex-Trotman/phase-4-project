@@ -30,10 +30,15 @@ function StatisticsCategoryPage() {
         }
 
         const data = await response.json();
-        const formattedData = data.map((log) => ({
-          date: log.log_date,
-          count: 1,
-        }));
+        console.log(data);
+
+        const formattedData = data
+          .filter((log) => log.status) // Only keep logs with status true
+          .map((log) => ({
+            date: log.log_date,
+            count: 1, // Always 1 since status is true
+          }));
+
         setLogs(formattedData);
       } catch (err) {
         setError(err.message);
