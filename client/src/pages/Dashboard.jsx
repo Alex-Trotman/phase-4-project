@@ -3,7 +3,7 @@ import { useNavigate } from "react-router-dom"; // Link,
 import { MyContext } from "../MyContext";
 import "../styles/Dashboard.css";
 
-function Dashboard() {
+export default function Dashboard() {
   const { user, habits, fetchHabits } = useContext(MyContext);
   const [averagePerDaily, setAveragePerDaily] = useState(0);
   const navigate = useNavigate();
@@ -63,24 +63,35 @@ function Dashboard() {
       <div className="bg-white m-4 md:row-span-4 md:col-span-3 sm:col-span-12 rounded-lg"></div>
 
       {/* Fourth div with cards */}
-      <div className="grid grid-cols-1 justify-center bg-white m-4 md:row-span-8 md:col-span-12 rounded-lg h-full gap-1">
+      <div className="grid grid-cols-1 justify-center bg-white m-4 md:row-span-8 md:col-span-12 rounded-lg max-h-96 overflow-y-auto gap-1">
         {/* Card container */}
-        <div className="bg-slate-500 col-span-1 h-32 mx-3 my-2 p-4 rounded-lg flex justify-between items-center">
+        {habits.map((habit) => {
+          return <HabitCard habit={habit} />;
+        })}
+        </div>
+
+      </div>
+  );
+}
+
+function HabitCard({habit}){
+  return (
+    <div className="bg-slate-500 col-span-1 h-32 mx-3 my-2 p-4 rounded-lg flex justify-between items-center">
           {/* Habit name and type on the left */}
           <div className="text-white">
-            <h4 className="text-lg font-semibold">Habit name</h4>
-            <p className="text-sm">Habit type</p>
+            <h4 className="text-lg font-semibold">{habit.name}</h4>
+            <p className="text-sm">{habit.metric_type}</p>
           </div>
 
           {/* Checkboxes spaced evenly with day labels */}
           <div className="flex flex-col justify-center">
             <div className="flex justify-between text-white mb-1">
-              <span>S</span>
               <span>M</span>
               <span>T</span>
               <span>W</span>
               <span>T</span>
               <span>F</span>
+              <span>S</span>
               <span>S</span>
             </div>
             <div className="flex justify-between space-x-2">
@@ -129,9 +140,5 @@ function Dashboard() {
             </div>
           </div>
         </div>
-      </div>
-    </div>
-  );
+  )
 }
-
-export default Dashboard;
