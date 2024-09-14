@@ -140,7 +140,7 @@ function DashboardLayout() {
       {/* Main Content */}
       <div className="flex-1 flex flex-col overflow-hidden">
         <DashboardHeader setExpanded={setExpanded} expanded={expanded} />
-        <div className="flex-1 overflow-y-auto">
+        <div className="bg-slate-100 flex-1 overflow-y-auto">
           <Outlet />
         </div>
       </div>
