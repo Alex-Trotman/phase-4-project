@@ -111,7 +111,9 @@ export default function Dashboard() {
 }
 
 function BooleanHabitCard({ habit }) {
-  const [weeklyLogs, setWeeklyLogs] = useState(Array(7).fill(false));
+  const [weeklyLogs, setWeeklyLogs] = useState(
+    Array(7).fill({ status: false, log_id: null })
+  );
   const [weekDates, setWeekDates] = useState([]);
 
   useEffect(() => {
@@ -121,11 +123,6 @@ function BooleanHabitCard({ habit }) {
       .then((data) => {
         // Filter logs for the current week
         const currentWeekLogs = filterLogsForCurrentWeek(data);
-        console.log(
-          `Filtered logs for the current week of ${habit.name}:`,
-          currentWeekLogs
-        ); // Log filtered logs
-
         setWeeklyLogs(currentWeekLogs);
 
         // Calculate and set the dates for the current week
@@ -138,23 +135,20 @@ function BooleanHabitCard({ habit }) {
     const today = new Date();
     const dayOfWeek = today.getDay(); // Get current day of the week (0 is Sunday, 6 is Saturday)
 
+    // Set Monday as the start of the week
     const startOfWeek = new Date(today);
-    startOfWeek.setDate(today.getDate() - dayOfWeek + 1); // Set start to Monday
+    startOfWeek.setDate(
+      today.getDate() - (dayOfWeek === 0 ? 6 : dayOfWeek - 1)
+    ); // Adjust so Monday = 0
+
     startOfWeek.setHours(0, 0, 0, 0); // Set to start of the day
 
-    const endOfWeek = new Date(startOfWeek);
-    endOfWeek.setDate(startOfWeek.getDate() + 6); // Set end to Sunday
-    endOfWeek.setHours(23, 59, 59, 999); // Set to end of the day
-
-    // Initialize an array for the week with 7 false values (for each day of the week)
-    const weeklyLogStatus = Array(7).fill(false);
+    const weeklyLogStatus = Array(7).fill({ status: false, log_id: null });
 
     logs.forEach((log) => {
       const logDate = new Date(log.log_date);
-      if (logDate >= startOfWeek && logDate <= endOfWeek) {
-        const dayIndex = (logDate.getDay() + 6) % 7; // Adjust so Monday = 0 and Sunday = 6
-        weeklyLogStatus[dayIndex] = log.status;
-      }
+      const dayIndex = (logDate.getDay() + 6) % 7; // Adjust so Monday = 0 and Sunday = 6
+      weeklyLogStatus[dayIndex] = { status: log.status, log_id: log.id };
     });
 
     return weeklyLogStatus;
@@ -164,54 +158,118 @@ function BooleanHabitCard({ habit }) {
     const today = new Date();
     const dayOfWeek = today.getDay(); // Get current day of the week (0 is Sunday, 6 is Saturday)
 
+    // Set Monday as the start of the week
     const startOfWeek = new Date(today);
-    startOfWeek.setDate(today.getDate() - dayOfWeek + 1); // Set start to Monday
+    startOfWeek.setDate(
+      today.getDate() - (dayOfWeek === 0 ? 6 : dayOfWeek - 1)
+    ); // Adjust so Monday = 0
 
     const weekDates = [];
     for (let i = 0; i < 7; i++) {
       const currentDate = new Date(startOfWeek);
       currentDate.setDate(startOfWeek.getDate() + i);
-      weekDates.push(currentDate);
+      weekDates.push(new Date(currentDate)); // Ensure each date is a new Date object
     }
 
     return weekDates;
   };
 
+  // Format date as YYYY-MM-DD for backend usage
   const formatDate = (date) => {
-    return `${date.getDate()}-${date.toLocaleString("default", {
-      month: "short",
-    })}`;
+    const year = date.getFullYear();
+    const month = String(date.getMonth() + 1).padStart(2, "0"); // Ensure 2 digits
+    const day = String(date.getDate()).padStart(2, "0"); // Ensure 2 digits
+    return `${year}-${month}-${day}`;
+  };
+
+  // Format date for label as Sep-12
+  const formatDateForLabel = (date) => {
+    const month = date.toLocaleString("default", { month: "short" });
+    const day = date.getDate();
+    return `${month}-${day}`;
+  };
+
+  // Format date for just the day number
+  const formatDayOnly = (date) => {
+    return date.getDate();
+  };
+
+  const handleCheckboxChange = (dayIndex) => {
+    const newLogs = [...weeklyLogs];
+    const newStatus = !newLogs[dayIndex].status; // Toggle the current status
+    const log_id = newLogs[dayIndex].log_id;
+
+    // Update the status locally first
+    newLogs[dayIndex] = { ...newLogs[dayIndex], status: newStatus };
+    setWeeklyLogs(newLogs);
+
+    const logDate = formatDate(weekDates[dayIndex]); // Format date as YYYY-MM-DD
+
+    if (log_id) {
+      // If the log exists, send a PUT request to update the status
+      fetch(`/logs/${log_id}`, {
+        method: "PUT",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          status: newStatus,
+          log_date: logDate,
+        }),
+      })
+        .then((response) => response.json())
+        .then((data) => {
+          console.log(
+            `Updated log for ${habit.name} on day ${dayIndex}:`,
+            data
+          );
+        })
+        .catch((error) => {
+          console.error("Error updating log:", error);
+        });
+    } else {
+      // Check if a log for this date already exists before creating a new one
+      fetch(`/habits/${habit.id}/logs/by-date?log_date=${logDate}`)
+        .then((response) => response.json())
+        .then((existingLog) => {
+          if (existingLog.message === "No log found for the given date") {
+            // If no log exists, send a POST request to create a new log
+            fetch(`/habits/${habit.id}/logs`, {
+              method: "POST",
+              headers: {
+                "Content-Type": "application/json",
+              },
+              body: JSON.stringify({
+                status: newStatus,
+                log_date: logDate,
+              }),
+            })
+              .then((response) => response.json())
+              .then((data) => {
+                // Update the log_id for this day once the log is created
+                newLogs[dayIndex] = { ...newLogs[dayIndex], log_id: data.id };
+                setWeeklyLogs(newLogs);
+                console.log(
+                  `Created new log for ${habit.name} on day ${dayIndex}:`,
+                  data
+                );
+              })
+              .catch((error) => {
+                console.error("Error creating new log:", error);
+              });
+          } else {
+            console.log(
+              `Log already exists for ${logDate}. Skipping creation.`
+            );
+          }
+        })
+        .catch((error) => {
+          console.error("Error checking existing log:", error);
+        });
+    }
   };
 
   return (
-    // <div className="bg-slate-500 col-span-1 h-32 mx-3 my-2 p-4 rounded-lg flex justify-between items-center">
-    //   {/* Habit name and type on the left */}
-    //   <div className="text-white flex-1">
-    //     <h4 className="text-lg font-semibold">{habit.name}</h4>
-    //     <p className="text-sm">{habit.metric_type}</p>
-    //   </div>
-
-    //   {/* Checkboxes spaced evenly with day labels */}
-    //   <div className="flex-1">
-    //     <div className="flex justify-around text-white mb-1">
-    //       {weekDates.map((date, index) => (
-    //         <span key={index}>{formatDate(date)}</span>
-    //       ))}
-    //     </div>
-    //     <div className="flex justify-around">
-    //       {weeklyLogs.map((status, index) => (
-    //         <input
-    //           key={index}
-    //           type="checkbox"
-    //           checked={status} // Dynamically set the checked status based on weeklyLogs
-    //           readOnly // Disable changing the checkbox as it's just for display
-    //           className="form-checkbox text-blue-600"
-    //         />
-    //       ))}
-    //     </div>
-    //   </div>
-    // </div>
-
     <div className="bg-black text-white col-span-1 h-36 mx-3 my-2 p-5 rounded-lg flex justify-between items-center shadow-lg">
       <div className="flex-1">
         <h4 className="text-lg font-semibold text-teal-400">{habit.name}</h4>
@@ -221,17 +279,21 @@ function BooleanHabitCard({ habit }) {
         <div className="flex justify-around text-gray-500 mb-1">
           {weekDates.map((date, index) => (
             <span key={index} className="hover:text-teal-400">
-              {formatDate(date)}
+              {/* On small screens, show day only. On larger screens, show full date */}
+              <span className="block sm:hidden">{formatDayOnly(date)}</span>
+              <span className="hidden sm:block">
+                {formatDateForLabel(date)}
+              </span>
             </span>
           ))}
         </div>
         <div className="flex justify-around">
-          {weeklyLogs.map((status, index) => (
+          {weeklyLogs.map((log, index) => (
             <input
               key={index}
               type="checkbox"
-              checked={status}
-              readOnly
+              checked={log.status}
+              onChange={() => handleCheckboxChange(index)} // Toggle status on change
               className="form-checkbox text-teal-400"
             />
           ))}

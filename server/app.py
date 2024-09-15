@@ -219,6 +219,29 @@ class HabitLogResource(Resource):
         db.session.delete(log)
         db.session.commit()
         return {'message': '204: No Content'}, 204
+    
+class HabitLogByDateResource(Resource):
+    def get(self, habit_id):
+        user_id = session.get('user_id')
+        if not user_id:
+            return {'message': '401: Not Authorized'}, 401
+        
+        # Retrieve the log_date from the query parameters
+        log_date_str = request.args.get('log_date')
+        if not log_date_str:
+            return {'message': '400: log_date is required as a query parameter'}, 400
+
+        try:
+            log_date = datetime.strptime(log_date_str, '%Y-%m-%d').date()
+        except ValueError:
+            return {'message': 'Invalid date format, expected YYYY-MM-DD'}, 400
+
+        # Query the log for the given habit and date
+        log = HabitLog.query.filter_by(habit_id=habit_id, log_date=log_date).first()
+        if log:
+            return log.to_dict(), 200
+        else:
+            return {'message': 'No log found for the given date'}, 404
 
 class HabitDataResource(Resource):
     def get(self, habit_id):
@@ -400,6 +423,7 @@ api.add_resource(SignUp, "/signup")
 api.add_resource(CategoryResource, '/categories', '/categories/<int:category_id>')
 api.add_resource(HabitResource, '/habits', '/habits/<int:habit_id>')
 api.add_resource(HabitLogResource, '/habits/<int:habit_id>/logs', '/logs/<int:log_id>')
+api.add_resource(HabitLogByDateResource, '/habits/<int:habit_id>/logs/by-date')
 api.add_resource(HabitDataResource, '/habits/<int:habit_id>/data', '/data/<int:data_id>')
 # api.add_resource(HabitLogsForDayResource, '/logs/<string:log_date>')
 # api.add_resource(HabitDataForDayResource, '/data/<string:log_date>')
