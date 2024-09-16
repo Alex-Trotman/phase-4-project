@@ -1,6 +1,8 @@
 import React, { useEffect, useContext, useState } from "react";
 import { useNavigate } from "react-router-dom"; // Link,
 import { MyContext } from "../MyContext";
+import Skeleton from "react-loading-skeleton";
+import "react-loading-skeleton/dist/skeleton.css";
 import "../styles/Dashboard.css";
 
 export default function Dashboard() {
@@ -43,44 +45,6 @@ export default function Dashboard() {
   console.log(habits);
 
   return (
-    // <div className="dashboard-main grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 bg-slate-200 h-full gap-4">
-    //   <div className="card flex items-center justify-center bg-slate-400 m-4 rounded-lg hover:bg-stone-400 min-h-48">
-    //     {habits.length} Total habits
-    //   </div>
-    //   <div className="card flex items-center justify-center bg-slate-400 m-4 rounded-lg hover:bg-stone-400 min-h-48">
-    //     X Perfect days
-    //   </div>
-    //   <div className="card flex items-center justify-center bg-slate-400 m-4 rounded-lg hover:bg-stone-400 min-h-48">
-    //     {averagePerDaily} Average Per Daily
-    //   </div>
-    //   <div className="card flex items-center justify-center sm:row-span-1 sm:col-span-1 col-span-1 row-span-1 bg-slate-400 m-4 rounded-lg hover:bg-stone-400 min-h-48">
-    //     X Total Streaks
-    //   </div>
-    //   <div className="card flex items-center justify-center bg-slate-400 m-4 rounded-lg hover:bg-stone-400 min-h-48">
-    //     Lorem ipsum dolor sit amet consectetur
-    //   </div>
-    //   <div className="card flex items-center justify-center bg-slate-400 m-4 rounded-lg hover:bg-stone-400 min-h-48">
-    //     Lorem ipsum dolor sit amet consectetur
-    //   </div>
-    //   {/* <Link to="/logout">Logout</Link> */}
-    // </div>
-
-    // 9-13-2024
-
-    // <div className="dashboard-main grid grid-cols-1 grid-row-4 md:grid-cols-12 md:grid-rows-12 bg-slate-200 h-min max-w-7xl mx-auto p-2 md:gap-1">
-    //   <div className="bg-white m-4 md:row-span-4 md:col-span-3 sm:col-span-12 rounded-lg"></div>
-    //   <div className="bg-white m-4 md:row-span-4 md:col-span-6 sm:col-span-12 rounded-lg"></div>
-    //   <div className="bg-white m-4 md:row-span-4 md:col-span-3 sm:col-span-12 rounded-lg"></div>
-
-    //   {/* Fourth div with cards */}
-    //   <div className="grid grid-cols-1 justify-center bg-white m-4 md:row-span-8 md:col-span-12 rounded-lg max-h-96 overflow-y-auto gap-1">
-    //     {/* Card container */}
-    //     {habits.map((habit) => {
-    //       return <HabitCard habit={habit} />;
-    //     })}
-    //   </div>
-    // </div>
-
     <div className="dashboard-main grid grid-rows-2 grid-cols-1 max-w-7xl mx-auto">
       <div className="grid grid-cols-1 md:grid-cols-3 items-center justify-items-center gap-4 m-4">
         <div className="bg-white w-full h-96 rounded-3xl text-center content-center text-4xl">
@@ -115,6 +79,7 @@ function BooleanHabitCard({ habit }) {
     Array(7).fill({ status: false, log_id: null })
   );
   const [weekDates, setWeekDates] = useState([]);
+  const [loading, setLoading] = useState(true); // New loading state
 
   useEffect(() => {
     // Fetch all logs for the habit
@@ -128,6 +93,8 @@ function BooleanHabitCard({ habit }) {
         // Calculate and set the dates for the current week
         const dates = getDatesForCurrentWeek();
         setWeekDates(dates);
+
+        setLoading(false); // Stop loading once the data is fetched
       });
   }, [habit.id]);
 
@@ -272,31 +239,46 @@ function BooleanHabitCard({ habit }) {
   return (
     <div className="bg-black text-white col-span-1 h-36 mx-3 my-2 p-5 rounded-lg flex justify-between items-center shadow-lg">
       <div className="flex-1">
-        <h4 className="text-lg font-semibold text-teal-400">{habit.name}</h4>
-        <p className="text-sm text-gray-500">{habit.metric_type}</p>
+        <h4 className="text-lg font-semibold text-teal-400">
+          {loading ? <Skeleton width={100} /> : habit.name}{" "}
+          {/* Skeleton for habit name */}
+        </h4>
+        <p className="text-sm text-gray-500">
+          {loading ? <Skeleton width={60} /> : habit.metric_type}{" "}
+          {/* Skeleton for metric type */}
+        </p>
       </div>
       <div className="flex-1">
         <div className="flex justify-around text-gray-500 mb-1">
           {weekDates.map((date, index) => (
             <span key={index} className="hover:text-teal-400">
-              {/* On small screens, show day only. On larger screens, show full date */}
-              <span className="block sm:hidden">{formatDayOnly(date)}</span>
-              <span className="hidden sm:block">
-                {formatDateForLabel(date)}
-              </span>
+              {loading ? (
+                <Skeleton width={20} />
+              ) : (
+                <>
+                  <span className="block sm:hidden">{formatDayOnly(date)}</span>
+                  <span className="hidden sm:block">
+                    {formatDateForLabel(date)}
+                  </span>
+                </>
+              )}
             </span>
           ))}
         </div>
         <div className="flex justify-around">
-          {weeklyLogs.map((log, index) => (
-            <input
-              key={index}
-              type="checkbox"
-              checked={log.status}
-              onChange={() => handleCheckboxChange(index)} // Toggle status on change
-              className="form-checkbox text-teal-400"
-            />
-          ))}
+          {weeklyLogs.map((log, index) =>
+            loading ? (
+              <Skeleton circle={true} width={24} height={24} key={index} />
+            ) : (
+              <input
+                key={index}
+                type="checkbox"
+                checked={log.status}
+                onChange={() => handleCheckboxChange(index)}
+                className="form-checkbox text-teal-400"
+              />
+            )
+          )}
         </div>
       </div>
     </div>
