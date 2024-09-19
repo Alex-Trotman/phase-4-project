@@ -45,22 +45,23 @@ export default function Dashboard() {
   console.log(habits);
 
   return (
-    <div className="dashboard-main grid grid-rows-2 grid-cols-1 max-w-7xl mx-auto">
+    <div className="dashboard-main grid grid-cols-1 max-w-7xl mx-auto min-h-screen">
       <div className="grid grid-cols-1 md:grid-cols-3 items-center justify-items-center gap-4 m-4">
-        <div className="bg-white w-full h-96 rounded-3xl text-center content-center text-4xl">
+        <div className="bg-white w-full h-72 rounded-3xl text-center content-center text-4xl p-4">
           Yesterday's stats
         </div>
-        <div className="bg-white w-full h-96 rounded-3xl text-center content-center text-4xl">
+        <div className="bg-white w-full h-72 rounded-3xl text-center content-center text-4xl p-4">
           Today's stats
         </div>
-        <div className="bg-white w-full h-96 rounded-3xl text-center content-center text-4xl">
+        <div className="bg-white w-full h-72 rounded-3xl text-center content-center text-4xl p-4">
           Today is {date}
         </div>
       </div>
-      <div>
-        {/* Fourth div with cards */}
-        <div className="grid grid-cols-1 justify-center bg-white m-4 md:row-span-8 md:col-span-12 rounded-lg max-h-96 overflow-y-auto gap-1">
-          {/* Card container */}
+
+      {/* Habit Cards Section */}
+      <div className="flex-1 bg-white m-4 rounded-lg overflow-y-auto max-h-[500px] p-4">
+        {/* Card container */}
+        <div className="grid grid-cols-1 justify-items-center gap-1">
           {habits.map((habit) => {
             if (habit.metric_type === "boolean") {
               return <BooleanHabitCard key={habit.name} habit={habit} />;
@@ -237,19 +238,17 @@ function BooleanHabitCard({ habit }) {
   };
 
   return (
-    <div className="bg-black text-white col-span-1 h-36 mx-3 my-2 p-5 rounded-lg flex justify-between items-center shadow-lg">
-      <div className="flex-1">
-        <h4 className="text-lg font-semibold text-teal-400">
-          {loading ? <Skeleton width={100} /> : habit.name}{" "}
-          {/* Skeleton for habit name */}
+    <div className="bg-black text-white col-span-1 max-w-6xl h-auto mx-3 my-2 p-5 rounded-lg w-full overflow-hidden shadow-lg flex flex-col sm:flex-row justify-between items-start sm:items-center">
+      <div className="flex-1 mb-4 sm:mb-0">
+        <h4 className="text-lg font-semibold text-teal-400 mb-2">
+          {loading ? <Skeleton width={100} /> : habit.name}
         </h4>
         <p className="text-sm text-gray-500">
-          {loading ? <Skeleton width={60} /> : habit.metric_type}{" "}
-          {/* Skeleton for metric type */}
+          {loading ? <Skeleton width={60} /> : habit.metric_type}
         </p>
       </div>
       <div className="flex-1">
-        <div className="flex justify-around text-gray-500 mb-1">
+        <div className="grid grid-cols-7 gap-4 text-gray-500 mb-2">
           {weekDates.map((date, index) => (
             <span key={index} className="hover:text-teal-400">
               {loading ? (
@@ -265,7 +264,7 @@ function BooleanHabitCard({ habit }) {
             </span>
           ))}
         </div>
-        <div className="flex justify-around">
+        <div className="grid grid-cols-7 gap-4">
           {weeklyLogs.map((log, index) =>
             loading ? (
               <Skeleton circle={true} width={24} height={24} key={index} />
@@ -441,9 +440,9 @@ function NumericHabitCard({ habit }) {
   };
 
   return (
-    <div className="bg-black text-white col-span-1 h-36 mx-3 my-2 p-5 rounded-lg w-full overflow-hidden shadow-lg flex justify-between items-center flex-wrap">
-      <div className="flex-1">
-        <h4 className="text-lg font-semibold text-teal-400">
+    <div className="bg-black text-white col-span-1 max-w-6xl h-auto mx-3 my-2 p-5 rounded-lg w-full overflow-hidden shadow-lg flex flex-col sm:flex-row justify-between items-start sm:items-center">
+      <div className="flex-1 mb-4 sm:mb-0">
+        <h4 className="text-lg font-semibold text-teal-400 mb-2">
           {loading ? <Skeleton width={100} /> : habit.name}
         </h4>
         <p className="text-sm text-gray-500">
@@ -451,7 +450,7 @@ function NumericHabitCard({ habit }) {
         </p>
       </div>
       <div className="flex-1">
-        <div className="flex justify-around text-gray-500 mb-1 flex-wrap">
+        <div className="grid grid-cols-7 gap-4 text-gray-500 mb-2">
           {weekDates.map((date, index) => (
             <span key={index} className="hover:text-teal-400">
               {loading ? (
@@ -467,7 +466,7 @@ function NumericHabitCard({ habit }) {
             </span>
           ))}
         </div>
-        <div className="flex justify-around flex-wrap">
+        <div className="grid grid-cols-7 gap-4">
           {weeklyLogs.map((log, index) =>
             loading ? (
               <Skeleton circle={true} width={24} height={24} key={index} />
@@ -477,7 +476,7 @@ function NumericHabitCard({ habit }) {
                 type="number"
                 value={log.value}
                 onChange={(e) => handleInputChange(index, e)}
-                className="form-input text-teal-400 w-12 border-b border-teal-400 bg-transparent focus:outline-none"
+                className="form-input text-teal-400 w-16 border-b border-teal-400 bg-transparent focus:outline-none focus:ring-2 focus:ring-teal-400 transition-all"
               />
             )
           )}
