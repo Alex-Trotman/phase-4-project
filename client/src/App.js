@@ -92,6 +92,7 @@ function HomeLayout() {
 function DashboardLayout() {
   const [expanded, setExpanded] = useState(false);
   const location = useLocation();
+
   return (
     <div className="app-container flex h-screen">
       {/* Sidebar */}

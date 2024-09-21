@@ -7,6 +7,7 @@ import { IoIosStats } from "react-icons/io";
 import { FaListCheck } from "react-icons/fa6";
 import { IoMdMore } from "react-icons/io";
 import { ChevronFirst, ChevronLast } from "lucide-react";
+import logo from "../assets/logo.svg";
 
 const SideBarContext = createContext();
 
@@ -44,9 +45,10 @@ export default function SideBar2({ children, expanded, setExpanded }) {
       <nav className="flex flex-col h-full bg-white border-r shadow-sm">
         <div className="p-4 pb-2 flex justify-between items-center">
           <img
-            src="https://img.logoipsum.com/261.svg"
+            // src="https://img.logoipsum.com/261.svg"
+            src={logo}
             className={`overflow-hidden transition-all ${
-              expanded ? "w-32" : "w-0"
+              expanded ? "w-34" : "w-0"
             }`}
             alt=""
           />
@@ -63,7 +65,13 @@ export default function SideBar2({ children, expanded, setExpanded }) {
 
         <div className="border-t flex p-3">
           <img
-            src="https://ui-avatars.com/api?background=c7d2fe&color=3730a3&bold=true"
+            src={
+              user
+                ? `https://ui-avatars.com/api?name=${encodeURIComponent(
+                    user.username
+                  )}&background=c7d2fe&color=3730a3&bold=true`
+                : "Loading"
+            }
             alt=""
             className="w-10 h-10 rounded-md"
           />
@@ -76,9 +84,9 @@ export default function SideBar2({ children, expanded, setExpanded }) {
               <h4 className="font-semibold">
                 {user ? user.username : "Loading"}
               </h4>
-              <span className="text-xs text-gray-600">johndoe@gmail.com</span>
+              {/* <span className="text-xs text-gray-600">johndoe@gmail.com</span> */}
             </div>
-            <IoMdMore size={20} />
+            {/* <IoMdMore size={20} /> */}
           </div>
         </div>
       </nav>

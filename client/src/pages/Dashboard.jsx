@@ -1,5 +1,5 @@
 import React, { useEffect, useContext, useState } from "react";
-import { useNavigate } from "react-router-dom"; // Link,
+import { useNavigate, Link } from "react-router-dom"; // ,
 import { MyContext } from "../MyContext";
 import Skeleton from "react-loading-skeleton";
 import "react-loading-skeleton/dist/skeleton.css";
@@ -45,8 +45,37 @@ export default function Dashboard() {
   console.log(habits);
 
   return (
-    <div className="dashboard-main grid grid-cols-1 max-w-7xl mx-auto min-h-screen">
-      <div className="grid grid-cols-1 md:grid-cols-3 items-center justify-items-center gap-4 m-4">
+    // <div className="dashboard-main grid grid-cols-1 max-w-7xl mx-auto min-h-screen">
+    //   <div className="grid grid-cols-1 md:grid-cols-3 items-center justify-items-center gap-4 m-4">
+    //     <div className="bg-white w-full h-72 rounded-3xl text-center content-center text-4xl p-4">
+    //       Yesterday's stats
+    //     </div>
+    //     <div className="bg-white w-full h-72 rounded-3xl text-center content-center text-4xl p-4">
+    //       Today's stats
+    //     </div>
+    //     <div className="bg-white w-full h-72 rounded-3xl text-center content-center text-4xl p-4">
+    //       Today is {date}
+    //     </div>
+    //   </div>
+
+    //   {/* Habit Cards Section */}
+    //   <div className="flex-1 bg-white m-4 rounded-lg overflow-y-auto max-h-[500px] p-4">
+    //     {/* Card container */}
+    //     <div className="grid grid-cols-1 justify-items-center gap-1">
+    //       {habits.map((habit) => {
+    //         if (habit.metric_type === "boolean") {
+    //           return <BooleanHabitCard key={habit.name} habit={habit} />;
+    //         } else if (habit.metric_type === "numeric") {
+    //           return <NumericHabitCard key={habit.name} habit={habit} />;
+    //         } else return null;
+    //       })}
+    //     </div>
+    //   </div>
+    // </div>
+
+    <div className="dashboard-main flex flex-col items-center max-w-7xl mx-auto min-h-screen space-y-8">
+      {/* Stats Section */}
+      <div className="grid grid-cols-1 md:grid-cols-3 gap-4 w-full mt-20 ">
         <div className="bg-white w-full h-72 rounded-3xl text-center content-center text-4xl p-4">
           Yesterday's stats
         </div>
@@ -59,16 +88,29 @@ export default function Dashboard() {
       </div>
 
       {/* Habit Cards Section */}
-      <div className="flex-1 bg-white m-4 rounded-lg overflow-y-auto max-h-[500px] p-4">
-        {/* Card container */}
-        <div className="grid grid-cols-1 justify-items-center gap-1">
-          {habits.map((habit) => {
-            if (habit.metric_type === "boolean") {
-              return <BooleanHabitCard key={habit.name} habit={habit} />;
-            } else if (habit.metric_type === "numeric") {
-              return <NumericHabitCard key={habit.name} habit={habit} />;
-            } else return null;
-          })}
+      <div className="w-full bg-white rounded-lg overflow-y-auto max-h-[500px] p-4">
+        <div className="grid grid-cols-1 gap-4 justify-items-center">
+          {habits.length > 0 ? (
+            habits.map((habit) => {
+              if (habit.metric_type === "boolean") {
+                return <BooleanHabitCard key={habit.name} habit={habit} />;
+              } else if (habit.metric_type === "numeric") {
+                return <NumericHabitCard key={habit.name} habit={habit} />;
+              } else return null;
+            })
+          ) : (
+            <p className="text-gray-500">
+              Please add{" "}
+              <Link to="/app/categories" className="text-blue-500 underline">
+                categories
+              </Link>{" "}
+              and{" "}
+              <Link to="/app/habits" className="text-blue-500 underline">
+                habits
+              </Link>
+              .
+            </p>
+          )}
         </div>
       </div>
     </div>
@@ -108,16 +150,18 @@ function BooleanHabitCard({ habit }) {
     startOfWeek.setDate(
       today.getDate() - (dayOfWeek === 0 ? 6 : dayOfWeek - 1)
     ); // Adjust so Monday = 0
-
     startOfWeek.setHours(0, 0, 0, 0); // Set to start of the day
 
     const weeklyLogStatus = Array(7).fill({ status: false, log_id: null });
 
-    logs.forEach((log) => {
-      const logDate = new Date(log.log_date);
-      const dayIndex = (logDate.getDay() + 6) % 7; // Adjust so Monday = 0 and Sunday = 6
-      weeklyLogStatus[dayIndex] = { status: log.status, log_id: log.id };
-    });
+    // Check if logs is an array and iterate over it
+    if (Array.isArray(logs)) {
+      logs.forEach((log) => {
+        const logDate = new Date(log.log_date);
+        const dayIndex = (logDate.getDay() + 6) % 7; // Adjust so Monday = 0 and Sunday = 6
+        weeklyLogStatus[dayIndex] = { status: log.status, log_id: log.id };
+      });
+    }
 
     return weeklyLogStatus;
   };

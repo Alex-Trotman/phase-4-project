@@ -1,13 +1,16 @@
 import React from "react";
 import { Link } from "react-router-dom";
 import "../styles/NavBar.css"; // Correct the import path
+import logo from "../assets/logo.svg";
 
 function NavBar() {
   return (
     <nav className="bg-white fixed top-0 left-0 w-full z-50 shadow-md">
       <div className="flex justify-between items-center px-8 py-4">
         <div className="text-black text-3xl">
-          <Link to="/">Habit Tracker</Link>
+          <Link to="/">
+            <img src={logo} className=""></img>
+          </Link>
         </div>
         <ul className="flex space-x-6">
           <li className="text-black text-2xl hover:text-gray-300 hover:underline">

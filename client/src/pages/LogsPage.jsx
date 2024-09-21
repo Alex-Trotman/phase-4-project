@@ -75,10 +75,10 @@ function LogsPage() {
   };
 
   return (
-    <div className="h-full bg-white">
+    <div className="min-h-screen bg-gray-100">
       {habit ? (
         <>
-          <h1>Habit: {habit.name}</h1>
+          {/* <h1>Habit: {habit.name}</h1> */}
           {habit.metric_type === "boolean" ? (
             <BooleanLogForm
               habitId={habitId}

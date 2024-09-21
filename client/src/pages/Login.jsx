@@ -4,6 +4,7 @@ import "../styles/Login.css"; // Ensure the import path is correct
 import { MyContext } from "../MyContext";
 import { useFormik } from "formik";
 import * as yup from "yup";
+import logo from "../assets/logo.svg";
 
 function Login() {
   const { user, setUser } = useContext(MyContext);
@@ -114,8 +115,10 @@ function Login() {
     <div>
       <nav className="bg-transparent p-4 px-8">
         <div className="flex justify-between items-center ">
-          <div className="text-gray-800 text-3xl">
-            <Link to="/">Habit Tracker</Link>
+          <div className="text-black text-3xl">
+            <Link to="/">
+              <img src={logo} className=""></img>
+            </Link>
           </div>
         </div>
       </nav>
