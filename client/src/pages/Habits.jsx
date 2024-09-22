@@ -133,7 +133,7 @@ function Habits() {
   };
 
   return (
-    <div className="habits-container bg-gray-100 p-6 shadow-lg flex flex-col items-center">
+    <div className="habits-container bg-gray-100 p-6 shadow-lg flex flex-col min-h-screen items-center">
       <form
         onSubmit={formik.handleSubmit}
         className="habit-input space-y-4 w-full max-w-md"

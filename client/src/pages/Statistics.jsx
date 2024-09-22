@@ -37,18 +37,37 @@
 import React, { useContext, useEffect } from "react";
 import { MyContext } from "../MyContext";
 import StatisticsDonut from "../components/StatisticsDonut";
+import { Link } from "react-router-dom";
 
 function Statistics() {
-  const { categories, fetchCategories } = useContext(MyContext);
+  const { categories, habits, fetchCategories } = useContext(MyContext);
 
   useEffect(() => {
     fetchCategories();
   }, []);
 
   return (
-    <div className="statistics-main flex items-center justify-center h-screen bg-white overflow-hidden">
+    <div className="statistics-main flex flex-col items-center justify-center h-screen bg-white overflow-hidden">
       {/* Full-screen centered donut chart */}
-      <StatisticsDonut categories={categories} />
+
+      {habits.length > 0 ? (
+        <>
+          <h1>Click on a section to drill down</h1>
+          <StatisticsDonut categories={categories} />
+        </>
+      ) : (
+        <p className="text-gray-500">
+          Please add{" "}
+          <Link to="/app/categories" className="text-blue-500 underline">
+            categories
+          </Link>{" "}
+          and{" "}
+          <Link to="/app/habits" className="text-blue-500 underline">
+            habits
+          </Link>
+          .
+        </p>
+      )}
     </div>
   );
 }

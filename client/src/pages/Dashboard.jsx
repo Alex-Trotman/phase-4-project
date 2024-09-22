@@ -88,7 +88,7 @@ export default function Dashboard() {
       </div>
 
       {/* Habit Cards Section */}
-      <div className="w-full bg-white rounded-lg overflow-y-auto max-h-[500px] p-4">
+      <div className="w-full bg-white rounded-lg sm:overflow-y-auto max-h-[500px] p-4">
         <div className="grid grid-cols-1 gap-4 justify-items-center">
           {habits.length > 0 ? (
             habits.map((habit) => {

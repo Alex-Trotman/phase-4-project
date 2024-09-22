@@ -131,7 +131,7 @@ function DashboardLayout() {
           <hr className="my-3" />
           <SideBarItem
             icon={<Settings size={20} />}
-            text="Settings"
+            text="Settings (coming soon)"
             path=""
             active={location.pathname === "/app/settings"} // Dynamically set active prop
           />
