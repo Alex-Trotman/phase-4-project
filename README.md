@@ -1,5 +1,8 @@
 # Habit Tracker
 
+![image](https://github.com/user-attachments/assets/e839b514-7162-448d-911b-c59c71723883)
+
+
 ## Overview
 
 Habit Tracker is a comprehensive web application designed to help users manage and track their daily habits. With features such as habit creation, daily logging, and data visualization, it aims to provide users with insights into their behavior and encourage positive habit formation.
